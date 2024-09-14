@@ -11,7 +11,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     <div
       className={`fixed min-h-full flex flex-col bg-white pb-10 shadow-2xl transition-all duration-175 ${
         isOpen ? "translate-x-0" : "-translate-x-96"
-      } md:!z-50 lg:!z-50 xl:!z-0 !z-[999]`}
+      } md:!z-50 lg:!z-50 xl:!z-50 !z-[999]`}
     >
       <span
         className="absolute top-4 right-4 cursor-pointer xl:hidden"

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
 
 export default function EventPoster({ title, date, shortDescription, image }) {
     const [fadeIn, setFadeIn] = useState('opacity-0 -translate-x-1/2');
@@ -47,4 +48,11 @@ export default function EventPoster({ title, date, shortDescription, image }) {
             </div>
         </>
     )
+}
+
+EventPoster.propTypes = {
+    title: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    shortDescription: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired
 }
