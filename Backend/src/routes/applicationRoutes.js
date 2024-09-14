@@ -3,6 +3,7 @@ const router = express.Router();
 const Application = require("../models/ApplicationSchema");
 const Event = require("../models/EventSchema")
 const User = require("../models/UserSchema")
+const { generateId } = require("../helpers/utils")
 
 // Route to add an application
 router.post("/applications", async (req, res) => {
@@ -10,14 +11,16 @@ router.post("/applications", async (req, res) => {
     // TODO: create a new application
     const userId = req.user._id
     const { eventId } = req.body
+    const qrCodeUrl = 'NULL'  // To be done later
 
+    // Event not exist
     if (! await Event.findById(eventId)) {
       return res.status(404).send({
         success: false,
         message: "This event not exist"
       })
     }
-    const application = await new Application({ userId, eventId }).save()
+    const application = await new Application({ _id: generateId(), userId, eventId, qrCodeUrl }).save()
 
     return res.status(201).send({
       success: true,
@@ -70,7 +73,8 @@ router.put("/applications/:id", async (req, res) => {
       })
     }
 
-    if (!Application.schema.path('role').options.enum.includes(status)) {
+    // Invalid status
+    if (!Application.schema.path('status').options.enum.includes(status)) {
       return res.status(404).send({
         success: false,
         message: "Invalid status"
@@ -81,7 +85,7 @@ router.put("/applications/:id", async (req, res) => {
     application.eventId = eventId
     application.status = status
 
-    application.save()
+    await application.save()
 
     return res.status(200).send({
       success: true,
@@ -118,7 +122,7 @@ router.delete("/applications/:id", async (req, res) => {
     console.log(err)
     return res.status(500).send({
       success: false,
-      message: "Error deleting the request"
+      message: "Error deleting the application"
     })
   }
 });
