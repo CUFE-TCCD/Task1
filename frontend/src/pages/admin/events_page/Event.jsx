@@ -1,4 +1,3 @@
-import React from "react";
 import withSidebar from "@/components/HOC/withSidebar";
 import EventPoster from "@/components/EventPosters/eventPoster";
 import EventTypePoster from "@/components/EventPosters/eventTypePoster";
@@ -71,7 +70,7 @@ const Event = () => {
 
   return (
     <>
-      <p className="text-[20px]">the collection of our new and excited events and our past milestones and successes</p>
+      <p className="text-[17px]">the collection of our new and excited events and our past milestones and successes</p>
       <div className="flex flex-col w-full mt-6">
         <p className='text-[30px] font-bold w-fit py-1'>upcoming events</p>
         <div className="flex flex-col sm:gap-0 px-3 border-l-2 border-[#a79d9d] gap-4 h-full w-full select-none">

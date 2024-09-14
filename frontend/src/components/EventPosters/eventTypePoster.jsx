@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export default function EventTypePoster({ title }) {
 
     return (
@@ -8,4 +10,8 @@ export default function EventTypePoster({ title }) {
             </div>
         </div>
     )
+}
+
+EventTypePoster.propTypes = {
+    title: PropTypes.string.isRequired
 }
