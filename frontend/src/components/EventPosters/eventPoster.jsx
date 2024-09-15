@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import DeleteEventConfirmPopup from "./deleteEventConfirmPopup";
 import PropTypes from 'prop-types';
 
 export default function EventPoster({ eventData, triggerEdit }) {
     const [fadeIn, setFadeIn] = useState('opacity-0 -translate-x-1/2');
+    const [deleteEvent, setDeleteEvent] = useState(false);
     const formattedDate = new Date(eventData.date).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -21,6 +23,7 @@ export default function EventPoster({ eventData, triggerEdit }) {
 
     return (
         <>
+            {deleteEvent && <DeleteEventConfirmPopup setOpenPopup={setDeleteEvent}/> }
             <div className="group flex-none sm:flex hidden w-full h-full z-10 gap-4 border-b-2 border-[#a79d9d] py-4">
                 <img src={eventData.image} alt="event" className="w-1/3 object-fit rounded-lg -z-10" />
                 <div className={`w-full py-3 px-6 relative border-l-2 border-[#a79d9d] ${fadeIn} transition-all duration-[400ms] ease-in-out`}>
@@ -30,7 +33,7 @@ export default function EventPoster({ eventData, triggerEdit }) {
                     <div className="gap-5 flex mt-4">
                         <button className="font-semibold px-4 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">More Details</button>
                         <button onClick={() => triggerEdit(eventData)} className="font-semibold px-4 py-1 rounded-lg bg-[#285D7C] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Edit</button>
-                        <button className="font-semibold px-4 py-1 rounded-lg bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Delete</button>
+                        <button onClick={() => setDeleteEvent(true)} className="font-semibold px-4 py-1 rounded-lg bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Delete</button>
                     </div>
                 </div>
             </div>
@@ -44,7 +47,7 @@ export default function EventPoster({ eventData, triggerEdit }) {
                     <div className="gap-2 mt-2 group-hover:flex hidden">
                         <button className="font-semibold px-4 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">More Details</button>
                         <button onClick={() => triggerEdit(eventData)} className="font-semibold px-2 py-1 rounded-lg text-xs bg-[#285D7C] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Edit</button>
-                        <button className="font-semibold px-2 py-1 rounded-lg text-xs bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Delete</button>
+                        <button onClick={() => setDeleteEvent(true)} className="font-semibold px-2 py-1 rounded-lg text-xs bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Delete</button>
                     </div>
                 </div>
             </div>
