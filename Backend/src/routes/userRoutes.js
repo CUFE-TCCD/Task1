@@ -1,20 +1,9 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const User = require("../models/UserSchema");
+const userController = require('../controllers/userController');
 
-// Route to add a user
-router.post("/users", async (req, res) => {
-  // TODO: create a new user
-});
-
-// Route to update a user
-router.put("/users/:id", async (req, res) => {
-  // TODO: update a user by id
-});
-
-// Route to delete a user
-router.delete("/users/:id", async (req, res) => {
-  // TODO: delete a user by id
-});
+router.post('/', userController.createUser);
+router.put('/:id', userController.updateUser);
+router.delete('/:id', userController.deleteUser);
 
 module.exports = router;

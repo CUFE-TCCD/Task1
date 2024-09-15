@@ -1,20 +1,9 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const Event = require("../models/EventSchema");
+const eventController = require('../controllers/eventController');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-// Route to add an event
-router.post("/events", async (req, res) => {
-  // TODO: create a new event
-});
-
-// Route to update an event
-router.put("/events/:id", async (req, res) => {
-  // TODO: update an event by id
-});
-
-// Route to delete an event
-router.delete("/events/:id", async (req, res) => {
-  // TODO: delete an event by id
-});
+router.post('/', authMiddleware, eventController.createEvent);
+router.put('/:id', authMiddleware, eventController.updateEvent);
 
 module.exports = router;
