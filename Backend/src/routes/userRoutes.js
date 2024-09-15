@@ -109,8 +109,7 @@ router.put("/users/:id", async (req, res) => {
 
     return res.status(200).json({
       status: 'success',
-      message: 'User updated successfully',
-      data: updatedUser
+      message: 'User updated successfully'
     });
   } catch (err) {
     console.error('Error updating user:', err);
