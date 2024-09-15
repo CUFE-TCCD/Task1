@@ -12,6 +12,8 @@ const Users = () => {
   // State to manage the selected user and the modal visibility
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filter, setFilter] = useState("All");
+
 
   // Function to handle the click on a user row
   const handleUserClick = (user) => {
@@ -25,9 +27,33 @@ const Users = () => {
     setSelectedUser(null);
   };
 
+  // Function to filter users by account type
+  const handleFilterChange = (accountType) => {
+    setFilter(accountType);
+  };
+
+  // Filtered users based on selected filter
+  const filteredUsers = users.filter((user) => (filter === "All" ? true : user.accountType === filter));
+ 
   return (
     <div>
       <h2>Users List</h2>
+       {/* Filter Buttons */}
+       <div style={filterButtonContainerStyle}>
+        <button onClick={() => handleFilterChange("All")} style={filter === "All" ? activeFilterStyle : filterButtonStyle}>
+          All
+        </button>
+        <button onClick={() => handleFilterChange("Admin")} style={filter === "Admin" ? activeFilterStyle : filterButtonStyle}>
+          Admins
+        </button>
+        <button onClick={() => handleFilterChange("User")} style={filter === "User" ? activeFilterStyle : filterButtonStyle}>
+          Users
+        </button>
+        <button onClick={() => handleFilterChange("Moderator")} style={filter === "Moderator" ? activeFilterStyle : filterButtonStyle}>
+          Moderators
+        </button>
+      </div>
+      {/* Users Table */}
       <table style={tableStyle}>
         <thead>
           <tr>
@@ -37,7 +63,7 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <tr key={user.id} onClick={() => handleUserClick(user)} style={rowStyle}>
               <td style={cellStyle}>{user.name}</td>
               <td style={cellStyle}>{user.email}</td>
@@ -111,6 +137,29 @@ const overlayStyle = {
   bottom: 0,
   backgroundColor: "rgba(0, 0, 0, 0.5)",
   zIndex: 999,
+};
+
+const filterButtonContainerStyle = {
+  display: "flex",
+  gap: "10px",
+  marginBottom: "20px",
+};
+
+const filterButtonStyle = {
+  padding: "8px 12px",
+  backgroundColor: "#f0f0f0",
+  border: "1px solid #ddd",
+  cursor: "pointer",
+  borderRadius: "4px",
+};
+
+const activeFilterStyle = {
+  padding: "8px 12px",
+  backgroundColor: "#007bff",
+  color: "white",
+  border: "1px solid #007bff",
+  cursor: "pointer",
+  borderRadius: "4px",
 };
 
 export default withSidebar(Users);
