@@ -76,8 +76,8 @@ const Event = () => {
   ];
 
   return (
-    <div className={`w-full h-fit pb-6 relative ${addNewEvent}`}>
-      {addNewEvent && <NewEventForm setOpenForm={setAddNewEvent} />}
+    <div className={`w-full h-fit pb-6 relative`}>
+      {addNewEvent && <NewEventForm setOpenForm={setAddNewEvent} openForm={addNewEvent}/>}
       {editEvent !== null && <EditEventForm eventData={editEvent} setOpenForm={setEditEvent} />}
       <div className={`w-full h-full ${addNewEvent || editEvent !== null ? "h-screen overflow-hidden" : ""}`}>
         <p className="text-[17px] mt-3 md:mt-0">the collection of our new and excited events and our past milestones and successes</p>
@@ -85,7 +85,7 @@ const Event = () => {
         <div className="flex flex-col w-full">
           <p className='text-[30px] font-bold w-fit py-1'>upcoming events</p>
           <div className="flex flex-col sm:gap-0 px-3 border-l-2 border-[#a79d9d] gap-4 h-full w-full select-none">
-            {events.map((event, index) => (
+            {events.map((event, index) => ( 
               <EventPoster key={index} triggerEdit={setEditEvent} eventData={event}/>
             ))}
           </div>

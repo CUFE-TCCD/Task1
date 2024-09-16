@@ -4,30 +4,19 @@ import { IoMdClose } from "react-icons/io";
 import PropTypes from 'prop-types';
 
 export default function EditEventForm({ setOpenForm, eventData }) {
-    const [fadeIn, setFadeIn] = useState('-translate-x-full');
     const [eventName, setEventName] = useState(eventData.title);
     const [eventDate, setEventDate] = useState(eventData.date);
     const [eventDescription, setEventDescription] = useState(eventData.shortDescription);
 
     useEffect(() => {
-        setTimeout(() => {
-            setFadeIn('translate-x-0');
-        }, 1);
-
+        window.scrollTo({ top: 0, behavior: 'auto' });
     }, []);
 
-    const handleDrawerShut = () => {
-        setFadeIn('-translate-x-full');
-        setTimeout(() => {
-            setOpenForm(null);
-        }, 820);
-    }
-
     return (
-        <div className={`absolute bg-white w-full h-fit pb-6 z-40 ${fadeIn} transition-all duration-[800ms] ease-in-out`}>
+        <div className={`absolute bg-white w-full h-fit pb-6 z-40 transition-all duration-[800ms] ease-in-out`}>
             <div className="flex justify-between w-[98%]">
                 <p className="text-[26px] font-bold">add New Event</p>
-                <IoMdClose onClick={() => handleDrawerShut()} size={30} className="hover:cursor-pointer" />
+                <IoMdClose onClick={() => setOpenForm(null)} size={30} className="hover:cursor-pointer" />
             </div>
 
             <div className="flex w-full flex-col gap-4 mt-4 select-none">
@@ -70,10 +59,13 @@ export default function EditEventForm({ setOpenForm, eventData }) {
                     </div>
                 </div>
                 <p className="font-semibold text-2xl -mb-3 border-b border-black mt-8">{"3)Extra content"}</p>
+                <div>
+                    to be added later
+                </div>
 
                 <hr className="border-y border-[#a79d9d]"/>
                 <div className="flex justify-center gap-4 rounded-lg border-2 border-[#a79d9d] p-4 w-fit mx-auto bg-gray-300">
-                    <button onClick={() => handleDrawerShut()} className="font-semibold px-6 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Cancel</button>
+                    <button onClick={() => setOpenForm(null)} className="font-semibold px-6 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Cancel</button>
                     <button className="font-semibold px-6 py-1 rounded-lg bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Save</button>
                 </div>
             </div>
