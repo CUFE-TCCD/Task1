@@ -49,10 +49,9 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
     });
   };
 
-  // Close modal when clicking outside
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
-      handleClose(); // Close the modal if clicked outside
+      handleClose(); 
     }
   };
 
@@ -62,13 +61,12 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
     }
-    // Cleanup event listener when the modal is closed or unmounted
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
 
-  if (!isOpen) return null; // Only render if the modal is open
+  if (!isOpen) return null; 
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 overflow-y-scroll">

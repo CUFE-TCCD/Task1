@@ -56,7 +56,7 @@ const Locations = () => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleAddLocation = (newLocation) => {
-    newLocation.id = allLocations.length + 1; // Adjust ID assignment as needed
+    newLocation.id = allLocations.length + 2; 
     setAllLocations([...allLocations, newLocation]);
     setIsModalOpen(false);
   };

@@ -23,7 +23,6 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
   };
 
   useEffect(function () {
-    // onUpdateLocation();
     handleUpdate()
   } , [toReload ])
 
@@ -183,7 +182,6 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
             Delete Location
           </button>
 
-          {/* Manage Images Modal Trigger */}
           <button
             onClick={() => setModalOpen(true)}
             className="w-full bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-yellow-600 transition-all duration-300 my-2"
@@ -193,7 +191,6 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
         </div>
       </div>
 
-      {/* Modal for managing images */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
@@ -211,7 +208,6 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
               </div>
             ))}
 
-            {/* Input to add new image */}
             <div className="mt-4 flex">
               <input
                 type="text"
@@ -228,7 +224,6 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
               </button>
             </div>
 
-            {/* Close Modal Button */}
             <button
               onClick={handleCloseModal}
               className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-all duration-300"
