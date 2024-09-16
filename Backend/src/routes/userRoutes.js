@@ -4,15 +4,79 @@ const User = require("../models/UserSchema");
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
+const validation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     summary: Creates a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - email
+ *               - password
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 description: The user's first name
+ *               lastName:
+ *                 type: string
+ *                 description: The user's last name
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: The user's email address
+ *               password:
+ *                 type: string
+ *                 description: |
+ *                   The user's password. It must contain:
+ *                   - At least one lowercase character
+ *                   - At least one uppercase character
+ *                   - At least one digit
+ *                   - At least one special character
+ *                   - Minimum length of 8 characters
+ *                 minLength: 8
+ *                 pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+ *               role:
+ *                 type: string
+ *                 enum:
+ *                   - president
+ *                   - head
+ *                   - vice_head
+ *                   - vice_president
+ *                   - administration
+ *                   - member
+ *                 default: member
+ *                 description: The role of the user in the organization. Defaults to `member` if not provided.
+ *           example:
+ *             firstName: John
+ *             lastName: Doe
+ *             email: johndoe@example.com
+ *             password: Password1!
+ *             role: member
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *       400:
+ *         description: Invalid input data
+ *       500:
+ *         description: Internal server error
+ */
 
 // Route to add a user
 router.post("/users", async (req, res) => {
   // TODO: create a new user
   let {firstName, lastName, email, password, role} = req.body;
 
-  const validation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   if (!validation.test(password)) {
     return res.status(400).json({
       status: 'failed',
@@ -62,6 +126,75 @@ router.post("/users", async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Updates an existing user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 description: The user's first name
+ *               lastName:
+ *                 type: string
+ *                 description: The user's last name
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: The user's email address
+ *               password:
+ *                 type: string
+ *                 description: |
+ *                   The user's password. It must contain:
+ *                   - At least one lowercase character
+ *                   - At least one uppercase character
+ *                   - At least one digit
+ *                   - At least one special character
+ *                   - Minimum length of 8 characters
+ *                 minLength: 8
+ *                 pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+ *               role:
+ *                 type: string
+ *                 enum:
+ *                   - president
+ *                   - head
+ *                   - vice_head
+ *                   - vice_president
+ *                   - administration
+ *                   - member
+ *                 description: The user's role in the organization
+ *           example:
+ *             firstName: Jane
+ *             lastName: Smith
+ *             email: janesmith@example.com
+ *             password: Password1!
+ *             role: member
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       400:
+ *         description: Invalid input data
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+
 // Route to update a user
 router.put("/users/:id", async (req, res) => {
   // TODO: update a user by id
@@ -87,6 +220,12 @@ router.put("/users/:id", async (req, res) => {
     updateFields.email = email;
   }
   if (password) {
+    if (!validation.test(password)) {
+      return res.status(400).json({
+        status: 'failed',
+        message: 'Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a number, and a special character.'
+      });
+    }
     const saltRounds = 10;
     updateFields.password = await bcrypt.hash(password, saltRounds);
   }
@@ -122,6 +261,28 @@ router.put("/users/:id", async (req, res) => {
 
 });
 
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Deletes a user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
 // Route to delete a user
 router.delete("/users/:id", async (req, res) => {
   // TODO: delete a user by id
