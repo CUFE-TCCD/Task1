@@ -13,6 +13,7 @@ const Event = require("./models/EventSchema");
 const Room = require("./models/RoomSchema");
 const Application = require("./models/ApplicationSchema");
 const Post = require("./models/PostSchema");
+const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 const port = 5300;
@@ -58,3 +59,5 @@ mongoose
   .catch((error) => {
     console.error("Error connecting to database:", error);
   });
+
+  app.use(globalErrorHandler);
