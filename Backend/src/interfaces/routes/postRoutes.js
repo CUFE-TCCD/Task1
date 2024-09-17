@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Post = require("../models/PostSchema");
+const Post = require("../domain/models/PostSchema");
 
 // Route to add a post
 router.post("/posts", async (req, res) => {
