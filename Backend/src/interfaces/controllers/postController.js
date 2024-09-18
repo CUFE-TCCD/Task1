@@ -1,6 +1,6 @@
-const { createPost, updatePost, deletePost } = require('../services/postService');
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
+const { createPost, updatePost, deletePost } = require("../../application/services/postService");
+const catchAsync = require("../../application/utils/catchAsync");
+const AppError = require("../../application/utils/appError");
 
 exports.createPost = catchAsync(async (req, res, next) => {
   const userId = req.user._id;
@@ -13,7 +13,7 @@ exports.createPost = catchAsync(async (req, res, next) => {
   const post = await createPost(userId, title, content, media);
   res.status(201).json({
     success: true,
-    message: 'Post created successfully',
+    message: "Post created successfully",
     post,
   });
 });
@@ -25,7 +25,7 @@ exports.updatePost = catchAsync(async (req, res, next) => {
   const post = await updatePost(postId, title, content, media);
   res.status(200).json({
     success: true,
-    message: 'Post updated successfully',
+    message: "Post updated successfully",
     post,
   });
 });
@@ -35,6 +35,6 @@ exports.deletePost = catchAsync(async (req, res, next) => {
   await deletePost(postId);
   res.status(202).json({
     success: true,
-    message: 'Post deleted successfully',
+    message: "Post deleted successfully",
   });
 });

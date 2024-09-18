@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 const app = require("./app");
-const config = require("./configuration");
-require("dotenv").config();
+require("dotenv").config({ path: "./data.env" });
+const config = require("./infrastructure/config/dbConfig");
+console.log("MONGODB_URI:", process.env.MONGODB_URI);
 
 const port = process.env.PORT || 5300;
-const connectionurl = config.cloudConnectString;
-
+//const connectionurl = config.cloudConnectString;
+const connectionurl =
+  "mongodb+srv://farouqdiaaeldin:TCCDDB@tccd.4jp7a.mongodb.net/?retryWrites=true&w=majority&appName=TCCD";
 mongoose
   .connect(connectionurl, {
     useNewUrlParser: true,

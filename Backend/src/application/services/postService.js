@@ -1,36 +1,36 @@
-const Post = require("../models/PostSchema");
-const { generateUUID } = require("../utils/generateUUID");
-
-exports.createPost = async (userId, title, content, media) => {
-  const post = await new Post({
-    _id: generateUUID(),
-    userId,
-    title,
-    content,
-    media,
-  }).save();
-  return post;
-};
-
-exports.updatePost = async (postId, title, content, media) => {
-  const post = await Post.findById(postId);
-
-  if (!post) {
-    throw new Error("Post not found");
+class PostService {
+  constructor(postRepository) {
+    this.postRepository = postRepository;
   }
 
-  post.title = title;
-  post.content = content;
-  post.media = media;
+  async createPost(postData) {
+    const { id, userId, title, content, media } = postData;
+    const post = new Post(id, userId, title, content, media);
 
-  await post.save();
-  return post;
-};
-
-exports.deletePost = async (postId) => {
-  const post = await Post.findByIdAndDelete(postId);
-  if (!post) {
-    throw new Error("Post not found");
+    return await this.postRepository.create(post);
   }
-  return post;
-};
+
+  async getPostById(id) {
+    return await this.postRepository.getById(id);
+  }
+
+  async getAllPosts() {
+    return await this.postRepository.getAll();
+  }
+
+  async updatePost(id, updatedPostData) {
+    const post = await this.postRepository.getById(id);
+    if (!post) {
+      throw new Error("Post not found.");
+    }
+
+    Object.assign(post, updatedPostData);
+    return await this.postRepository.update(id, post);
+  }
+
+  async deletePost(id) {
+    return await this.postRepository.delete(id);
+  }
+}
+
+module.exports = PostService;
