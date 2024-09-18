@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const RoomSchema = new Schema(
+const LocationSchema = new Schema(
   {
     _id: {
       type: String, // UUID
@@ -26,4 +26,4 @@ const RoomSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Room", RoomSchema);
+module.exports = mongoose.model("Location", LocationSchema);
