@@ -12,6 +12,10 @@ class UserRepository {
   async getAll() {
     return await UserModel.find().exec();
   }
+  
+  async getByEmail(email) {
+    return await UserModel.findOne({ email }).exec();
+  }
 
   async update(id, updatedData) {
     return await UserModel.findByIdAndUpdate(id, updatedData, { new: true }).exec();

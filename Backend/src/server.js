@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const app = require("./app");
 require("dotenv").config({ path: "./data.env" });
 const config = require("./infrastructure/config/dbConfig");
-console.log("MONGODB_URI:", process.env.MONGODB_URI);
+// console.log("MONGODB_URI:", process.env.MONGODB_URI);
 
 const port = process.env.PORT || 5300;
 //const connectionurl = config.cloudConnectString;

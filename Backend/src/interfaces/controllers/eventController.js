@@ -6,6 +6,7 @@ const getEventRegistrations = async (req, res) => {
     const registrations = await EventService.getEventRegistrations();
     res.status(200).json(registrations);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Failed to get event registrations" });
   }
 };

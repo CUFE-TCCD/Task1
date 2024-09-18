@@ -3,13 +3,6 @@ class UserService {
     this.userRepository = userRepository;
   }
 
-  async createUser(userData) {
-    const { id, firstName, lastName, email, password, role } = userData;
-    const user = new User(id, firstName, lastName, email, password, role);
-
-    return await this.userRepository.create(user);
-  }
-
   async getUserById(id) {
     return await this.userRepository.getById(id);
   }

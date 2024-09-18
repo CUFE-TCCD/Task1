@@ -7,16 +7,18 @@ const login = async (req, res) => {
     const token = await AuthService.login(email, password);
     res.status(200).json({ token });
   } catch (error) {
-    res.status(401).json({ error: "Invalid email or password" });
+    console.log(error);
+    res.status(401).json({ error: "Invalid email / password" });
   }
 };
 
 const signup = async (req, res) => {
-  const { firstname, lastname, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
   try {
-    const token = await AuthService.signup({ firstname, lastname, email, password });
+    const token = await AuthService.signup({ firstName, lastName, email, password });
     res.status(201).json({ token });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Failed to register user" });
   }
 };
