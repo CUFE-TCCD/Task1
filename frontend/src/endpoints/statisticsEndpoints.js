@@ -1,3 +1,4 @@
+
 export const userCount = async (email, password) => {
   try {
     const response = await fetch("http://localhost:5300/users/count", {
@@ -11,3 +12,4 @@ export const userCount = async (email, password) => {
     throw error;
   }
 };
+

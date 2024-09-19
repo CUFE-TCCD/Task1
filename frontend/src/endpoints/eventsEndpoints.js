@@ -1,1 +1,1 @@
-// right the logic of the  functions for fetching the events endpoints
+// write the logic of the  functions for fetching the events endpoints
