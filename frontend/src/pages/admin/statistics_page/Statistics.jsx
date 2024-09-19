@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import withSidebar from "@/components/HOC/withSidebar";
+import { userCount } from "@/endpoints/statisticsEndpoints";
 import { Line, Bar, Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -13,6 +14,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { FaHouseFloodWaterCircleArrowRight } from "react-icons/fa6";
 
 ChartJS.register(
   CategoryScale,
@@ -69,7 +71,7 @@ const Statistics = () => {
   });
 
   const [currentStatsData, setCurrentStatsData] = useState({
-    labels: ["Users", "Professors", "Admins"],
+    labels: ["Users", "Sponsers", "Members"],
     datasets: [
       {
         label: "Count",
@@ -116,17 +118,26 @@ const Statistics = () => {
 
   // Example of fetching data and updating state
   useEffect(() => {
-    // Replace with your data fetching logic
-    // Example:
-    // fetch("/api/stats")
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     setEventsData(data.eventsData);
-    //     setUserStatsData(data.userStatsData);
-    //     setCurrentStatsData(data.currentStatsData);
-    //     setBarData(data.barData);
-    //     setDoughnutData(data.doughnutData);
-    //   });
+    async function fetchUserCount() {
+      try {
+        const res = await userCount();
+        const data = await res.json();
+        setCurrentStatsData({
+          labels: ["Users", "Sponsers", "Members"],
+          datasets: [
+            {
+              label: "Count",
+              data: [data.users, data.sponsors, data.memebers],
+              backgroundColor: ["#4CAF50", "#cc3838", "#f59e0b"],
+              borderWidth: 1,
+            },
+          ],
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchUserCount();
   }, []);
 
   return (
