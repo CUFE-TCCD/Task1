@@ -29,17 +29,6 @@ const Signin = () => {
     }
   }
 
-  // useEffect(()=>{
-  //   const fetchUserData=async()=>{
-  //     try {
-  //       const response=await function();
-  //       const data=await response.json();
-  //       console.log(data)
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-  // },[])
 
   return (
     <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
