@@ -1,0 +1,2 @@
+Handles direct database operations
+Acts as an interface between the service layer and the database

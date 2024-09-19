@@ -5,12 +5,20 @@ import PropTypes from 'prop-types';
 
 export default function EditEventForm({ setOpenForm, eventData }) {
     const [eventName, setEventName] = useState(eventData.title);
-    const [eventDate, setEventDate] = useState(eventData.date);
-    const [eventDescription, setEventDescription] = useState(eventData.shortDescription);
+    const [eventDate, setEventDate] = useState(formatDate(eventData.date));
+    const [eventDescription, setEventDescription] = useState(eventData.description);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'auto' });
     }, []);
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
     return (
         <div className={`absolute bg-white w-full h-fit pb-6 z-40 transition-all duration-[800ms] ease-in-out`}>
@@ -29,7 +37,7 @@ export default function EditEventForm({ setOpenForm, eventData }) {
                 <div>
                     <p className="font-semibold text-lg">b.Event Date</p>
                     <p className="font-semibold text-sm mb-2">The main title of the whole event planned</p>
-                    <input onChange={(e) => setEventDate(e.target.value)} type="date" defaultValue={eventData.date} className={`w-full lg:w-1/3 p-2 border-2 border-[#a79d9d] rounded-lg ${eventDate === "" ? "bg-gray-200" : ""}`} />
+                    <input onChange={(e) => setEventDate(e.target.value)} type="date" defaultValue={formatDate(eventData.date)} className={`w-full lg:w-1/3 p-2 border-2 border-[#a79d9d] rounded-lg ${eventDate === "" ? "bg-gray-200" : ""}`} />
                 </div>
                 <div>
                     <p className="font-semibold text-lg">c.Event Description</p>
@@ -37,7 +45,7 @@ export default function EditEventForm({ setOpenForm, eventData }) {
                         <p className="font-semibold text-sm mb-2">Short summary of the event to be posted on the front pages</p>
                         <p className="text-xs text-end font-semibold mr-2">{eventDescription.length}</p>
                     </div>
-                    <textarea onChange={(e) => setEventDescription(e.target.value)} defaultValue={eventData.shortDescription} className={`w-full lg:w-1/3 h-40 p-2 border-2 border-[#a79d9d] rounded-lg ${eventDescription === "" ? "bg-gray-200" : ""}`} />
+                    <textarea onChange={(e) => setEventDescription(e.target.value)} defaultValue={eventData.description} className={`w-full lg:w-1/3 h-40 p-2 border-2 border-[#a79d9d] rounded-lg ${eventDescription === "" ? "bg-gray-200" : ""}`} />
                 </div>
                 <p className="font-semibold text-2xl -mb-3 border-b border-black mt-8">{"2) Media Attachments"}</p>
                 <div>
@@ -78,7 +86,7 @@ EditEventForm.propTypes = {
     eventData: PropTypes.shape({
         title: PropTypes.string,
         date: PropTypes.string,
-        shortDescription: PropTypes.string,
+        description: PropTypes.string,
         image: PropTypes.string
     })
 };

@@ -1,0 +1,2 @@
+Contains the business logic for each entity, 
+Abstracts the logic from the controller and interacts with repositories
