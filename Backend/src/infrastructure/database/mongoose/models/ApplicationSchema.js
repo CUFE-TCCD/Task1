@@ -25,6 +25,11 @@ const ApplicationSchema = new Schema(
       type: String,
       required: true,
     },
+    attended: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   { timestamps: { createdAt: "appliedAt" } }
 );

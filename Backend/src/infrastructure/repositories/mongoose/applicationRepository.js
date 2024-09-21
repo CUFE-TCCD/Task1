@@ -20,6 +20,9 @@ class ApplicationRepository {
   async delete(id) {
     return await ApplicationModel.findByIdAndDelete(id).exec();
   }
+  async getByEventId(eventId) {
+    return await ApplicationModel.find({ eventId }).exec();
+  }
 }
 
 module.exports = ApplicationRepository;

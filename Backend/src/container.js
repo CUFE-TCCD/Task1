@@ -16,7 +16,7 @@ const ApplicationService = require("./application/services/applicationService");
 
 const container = {
   eventLocationService: new EventLocationService(new EventLocationRepository()),
-  eventService: new EventService(new EventRepository()),
+  eventService: new EventService(new EventRepository(), new ApplicationRepository()),
   userService: new UserService(new UserRepository()),
   userProfileService: new UserProfileService(new UserProfileRepository()),
   feedbackService: new FeedbackService(new FeedbackRepository()),

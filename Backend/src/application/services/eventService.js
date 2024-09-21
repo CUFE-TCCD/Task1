@@ -1,6 +1,7 @@
 class EventService {
-  constructor(eventRepository) {
+  constructor(eventRepository, applicationRepository) {
     this.eventRepository = eventRepository;
+    this.applicationRepository = applicationRepository;
   }
 
   async createEvent(eventData) {
@@ -30,6 +31,12 @@ class EventService {
 
   async deleteEvent(id) {
     return await this.eventRepository.delete(id);
+  }
+  async getEventRegistrations() {
+    return await this.applicationRepository.getAll();
+  }
+  async getEventAttendance() {
+    return await this.applicationRepository.getByEventId();
   }
 }
 
