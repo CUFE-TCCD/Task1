@@ -1,4 +1,4 @@
-const container = require("../../container");
+const container = require("../../container/container");
 const LocationService = container.locationService;
 const createLocation = async (req, res) => {
   try {

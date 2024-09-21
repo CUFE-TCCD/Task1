@@ -1,4 +1,4 @@
-const container = require("../../container");
+const container = require("../../container/container");
 const FeedbackService = container.feedbackService;
 const getAllFeedbacks = async (req, res) => {
   try {

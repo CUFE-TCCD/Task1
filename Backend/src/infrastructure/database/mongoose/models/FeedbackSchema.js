@@ -20,6 +20,10 @@ const FeedbackSchema = new Schema(
       type: String,
       required: true,
     },
+    type: {
+      type: Boolean, // 0 for negative and 1 for positive
+      default: true,
+    },
   },
   { timestamps: true }
 );

@@ -1,4 +1,4 @@
-const container = require("../../container");
+const container = require("../../container/container");
 const EventService = container.eventService;
 
 const getEventRegistrations = async (req, res) => {

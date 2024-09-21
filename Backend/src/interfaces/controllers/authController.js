@@ -1,9 +1,7 @@
-const container = require("../../container");
-const AuthService = container.authService;
-
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
+    const AuthService = req.container.resolve('AuthService', new Set(), req.requestScope);
     const token = await AuthService.login(email, password);
     res.status(200).json({ token });
   } catch (error) {
@@ -15,6 +13,7 @@ const login = async (req, res) => {
 const signup = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   try {
+    const AuthService = req.container.resolve('AuthService', new Set(), req.requestScope);
     const token = await AuthService.signup({ firstName, lastName, email, password });
     res.status(201).json({ token });
   } catch (error) {

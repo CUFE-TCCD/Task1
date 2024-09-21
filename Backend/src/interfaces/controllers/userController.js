@@ -1,4 +1,4 @@
-const container = require("../../container");
+const container = require("../../container/container");
 const UserService = container.userService;
 const getUsersCountByRole = async (req, res) => {
   try {
