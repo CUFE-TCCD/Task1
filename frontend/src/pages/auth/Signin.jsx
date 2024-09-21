@@ -1,12 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import tccdLogo from "@/assets/tccd_logo.png";
 import { Link } from "react-router-dom";
 import GradientBgTop from "../../components/GradientBgTop";
+import { login } from "../../endpoints/authEndpoints";
 
 const Signin = () => {
+  const [signinForm, setSigninForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSigninForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      const response = await login(signinForm.email, signinForm.password);
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
   return (
     <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <GradientBgTop/>
+      <GradientBgTop />
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img alt="TCCD Logo" src={tccdLogo} className="mx-auto h-20 w-auto" />
         <h2 className="mt-2 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -15,7 +41,7 @@ const Signin = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form action="#" method="POST" className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
               htmlFor="email"
@@ -29,8 +55,9 @@ const Signin = () => {
                 name="email"
                 type="email"
                 required
+                onChange={handleInputChange}
                 autoComplete="email"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full focus:outline-none px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -50,8 +77,9 @@ const Signin = () => {
                 name="password"
                 type="password"
                 required
+                onChange={handleInputChange}
                 autoComplete="current-password"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full focus:outline-none px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -76,7 +104,6 @@ const Signin = () => {
           </Link>
         </p>
       </div>
-      
     </div>
   );
 };
