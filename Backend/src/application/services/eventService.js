@@ -7,7 +7,7 @@ class EventService {
   async createEvent(eventData) {
     const { id, name, description, date, createdBy, capacity } = eventData;
     const event = new Event(id, name, description, date, createdBy, capacity);
-
+    console.log("sadads");
     return await this.eventRepository.create(event);
   }
 
@@ -32,11 +32,11 @@ class EventService {
   async deleteEvent(id) {
     return await this.eventRepository.delete(id);
   }
-  async getEventRegistrations() {
-    return await this.applicationRepository.getAll();
+  async getEventRegistrations(eventId) {
+    return await this.applicationRepository.getByEventId(eventId);
   }
-  async getEventAttendance() {
-    return await this.applicationRepository.getByEventId();
+  async getEventAttendance(eventId) {
+    return await this.applicationRepository.getAttendenceByEventId(eventId);
   }
 }
 

@@ -11,6 +11,10 @@ class UserService {
     return await this.userRepository.getAll();
   }
 
+  async getCount() {
+    return await this.userRepository.getCountByRole();
+  }
+
   async updateUser(id, updatedUserData) {
     const user = await this.userRepository.getById(id);
     if (!user) {

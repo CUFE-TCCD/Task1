@@ -12,6 +12,17 @@ class UserRepository {
   async getAll() {
     return await UserModel.find().exec();
   }
+  
+  async getCountByRole() {
+    return await UserModel.aggregate([
+      {
+        $group: {
+          _id: '$role',        // Group by the 'role' field
+          count: { $sum: 1 }   // Count the number of documents in each group
+        }
+      }
+    ]).exec();
+  }
 
   async getByEmail(email) {
     return await UserModel.findOne({ email }).exec();

@@ -23,6 +23,9 @@ class ApplicationRepository {
   async getByEventId(eventId) {
     return await ApplicationModel.find({ eventId }).exec();
   }
+  async getAttendenceByEventId(eventId) {
+    return await ApplicationModel.find({eventId, attended: true})
+  }
 }
 
 module.exports = ApplicationRepository;

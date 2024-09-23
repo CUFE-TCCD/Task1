@@ -1,7 +1,6 @@
-const container = require("../../container/container");
-const FeedbackService = container.feedbackService;
 const getAllFeedbacks = async (req, res) => {
   try {
+    const FeedbackService = req.container.resolve('FeedbackService', new Set(), req.requestScope);
     const feedbacks = await FeedbackService.getAllFeedbacks();
     res.status(200).json(feedbacks);
   } catch (error) {

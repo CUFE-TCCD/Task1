@@ -24,6 +24,10 @@ class FeedbackRepository {
   async delete(id) {
     return await FeedbackModel.findByIdAndDelete(id).exec();
   }
+
+  async getAllFeedBacks(){
+    return await FeedbackModel.find().exec();
+  }
 }
 
 module.exports = FeedbackRepository;

@@ -20,7 +20,8 @@ class AuthService {
     }
 
     // Check password length
-    if (!(password.length < 8)) {
+    if (password.length < 8) {
+      console.log(password.length)
       throw new Error("Password should be at least 8 characters");
     }
 

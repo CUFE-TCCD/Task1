@@ -1,9 +1,8 @@
-const container = require("../../container/container");
-const EventService = container.eventService;
-
 const getEventRegistrations = async (req, res) => {
+  const {eventId} = req.params;
   try {
-    const registrations = await EventService.getEventRegistrations();
+    const EventService = req.container.resolve('EventService', new Set(), req.requestScope);
+    const registrations = await EventService.getEventRegistrations(eventId);
     res.status(200).json(registrations);
   } catch (error) {
     console.error(error);
@@ -14,6 +13,7 @@ const getEventRegistrations = async (req, res) => {
 const getEventAttendance = async (req, res) => {
   const { eventId } = req.params;
   try {
+    const EventService = req.container.resolve('EventService', new Set(), req.requestScope);
     const attendance = await EventService.getEventAttendance(eventId);
     res.status(200).json(attendance);
   } catch (error) {
@@ -24,6 +24,9 @@ const getEventAttendance = async (req, res) => {
 const createEvent = async (req, res) => {
   try {
     const eventData = req.body;
+    const EventService = req.container.resolve('EventService', new Set(), req.requestScope);
+    // console.log("ASDASD");
+    // console.log(EventService);
     const newEvent = await EventService.createEvent(eventData);
     res.status(201).json(newEvent);
   } catch (error) {
