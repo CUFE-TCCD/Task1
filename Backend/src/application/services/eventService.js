@@ -1,3 +1,6 @@
+const { v4: uuidv4 } = require("uuid");
+const Event = require("../../domain/models/Event");
+
 class EventService {
   constructor(eventRepository, applicationRepository) {
     this.eventRepository = eventRepository;
@@ -5,10 +8,23 @@ class EventService {
   }
 
   async createEvent(eventData) {
-    const { id, name, description, date, createdBy, capacity } = eventData;
-    const event = new Event(id, name, description, date, createdBy, capacity);
+    eventData._id = uuidv4();
+    eventData.createdBy = uuidv4();
 
-    return await this.eventRepository.create(event);
+    const { _id, title, description, date, location, createdBy, capacity } =
+      eventData;
+    const event = new Event(
+      _id,
+      title,
+      description,
+      date,
+      location,
+      createdBy,
+      capacity
+    );
+
+    const eventDocument = event.toDatabaseFormat();
+    return await this.eventRepository.create(eventDocument);
   }
 
   async getEventById(id) {
@@ -19,22 +35,32 @@ class EventService {
     return await this.eventRepository.getAll();
   }
 
-  async updateEvent(id, updatedEventData) {
-    const event = await this.eventRepository.getById(id);
+  async updateEvent(eventID, newEvent) {
+    const event = await this.eventRepository.update(eventID, newEvent);
     if (!event) {
-      throw new Error("Event not found.");
+      const error = new Error("Event not found");
+      error.statusCode = 404;
+      error.isOperational = true;
+      throw error;
     }
-
-    Object.assign(event, updatedEventData);
-    return await this.eventRepository.update(id, event);
+    return event;
   }
 
-  async deleteEvent(id) {
-    return await this.eventRepository.delete(id);
+  async deleteEvent(eventID) {
+    const event = await this.eventRepository.delete(eventID);
+    if (!event) {
+      const error = new Error("Event not found");
+      error.statusCode = 404;
+      error.isOperational = true;
+      throw error;
+    }
+    return event;
   }
+
   async getEventRegistrations() {
     return await this.applicationRepository.getAll();
   }
+  
   async getEventAttendance() {
     return await this.applicationRepository.getByEventId();
   }

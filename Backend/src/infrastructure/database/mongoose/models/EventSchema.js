@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+
 const Schema = mongoose.Schema;
 const EventSchema = new Schema(
   {
@@ -6,16 +7,21 @@ const EventSchema = new Schema(
       type: String, // UUID
       required: true,
     },
-    name: {
+    title: {
       type: String,
-      required: true,
+      required: [true, "Title field is required"],
     },
     description: {
       type: String,
+      required: [true, "Description field is required"],
     },
     date: {
       type: Date,
-      required: true,
+      required: [true, "Date field is required"],
+    },
+    location: {
+      type: String,
+      required: [true, "Location field is required"],
     },
     createdBy: {
       type: String, // UUID
@@ -24,7 +30,6 @@ const EventSchema = new Schema(
     },
     capacity: {
       type: Number,
-      required: true,
     },
   },
   { timestamps: true }
