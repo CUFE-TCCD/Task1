@@ -1,6 +1,4 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const config = require("../../infrastructure/config/jwtConfig");
+const { generateToken, hashPassword, comparePassword, validateEmail, generateResetToken, sendResetTokenEmail, validateResetToken } = require("../utils/authUtils");
 const { generateUUID } = require("../utils/generateId");
 
 class AuthService {
@@ -11,44 +9,104 @@ class AuthService {
   async signup(userDetails) {
     const { email, password, firstName, lastName } = userDetails;
 
+    // Check that fields are not empty
     if (!email || !password || !firstName || !lastName) {
       throw new Error("Missing required fields: email, password, firstName, or lastName.");
     }
 
+    // Validate Email address
+    if (!validateEmail(email)) {
+      throw new Error("Invalid Email address");
+    }
+
+    // Check password length
+    if (!(password.length < 8)) {
+      throw new Error("Password should be at least 8 characters");
+    }
+
+    // Check if user already exist
     const existingUser = await this.userRepository.getByEmail(email);
     if (existingUser) {
       throw new Error("User already exists");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = {
       _id: generateUUID(),
       ...userDetails,
-      password: hashedPassword,
+      password: await hashPassword(password),
     };
     await this.userRepository.create(newUser);
 
-    //const token = jwt.sign({ userId: newUser._id, role: "member" }, config.secret, { expiresIn: "1h" });
-    const token = jwt.sign({ userId: newUser._id, role: "member" }, "14d0d32a3a9eefd976ac12172360daf11cb7683a5fd6ddb1cfff570f6f473934", { expiresIn: "1h" });
-    return token;
+    return generateToken(newUser);
   }
 
   async login(email, password) {
+    // Validate Email address
+    if (!validateEmail(email)) {
+      throw new Error("Invalid Email address");
+    }
+
     const user = await this.userRepository.getByEmail(email);
     if (!user) {
       throw new Error("Invalid email");
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    if (!await comparePassword(password, user.password)) {
       throw new Error("Invalid password");
     }
 
-    //const token = jwt.sign({ userId: user._id, role: user.role }, config.jwtSecret, { expiresIn: "1h" });
-    const token = jwt.sign({ userId: user._id, role: user.role }, "14d0d32a3a9eefd976ac12172360daf11cb7683a5fd6ddb1cfff570f6f473934", { expiresIn: "1h" });
+    return generateToken(user);
+  }
 
-    return token;
+  async changePassword(userId, password, newPassword) {
+    const user = await this.userRepository.getById(userId);
+
+    if (!await comparePassword(password, user.password)) {
+      throw new Error("Invalid password");
+    }
+
+    this.userRepository.update(userId, { password: await hashPassword(newPassword) });
+
+    return generateToken(user);
+  }
+
+  async sendResetToken(email) {
+    // Validate Email address
+    if (!validateEmail(email)) {
+      throw new Error("Invalid Email address");
+    }
+
+    const user = await this.userRepository.getByEmail(email);
+    if (user) {
+      // Generate token
+      const token = generateResetToken(user)
+      sendResetTokenEmail(token)
+
+      console.log("Email sent successfully");
+    } else {
+      console.log("Email not found");
+    }
+  }
+
+  async resetPassword(token, password) {
+    const userId = validateResetToken(token)
+
+    // Invalid token
+    if (!userId) {
+      throw new Error("Invalid or expired token");
+    }
+
+    // Check password length
+    if (!(password.length < 8)) {
+      throw new Error("Password should be at least 8 characters");
+    }
+
+    // Reset password
+    this.userRepository.update(userId, { password: await hashPassword(password) });
+
+    // Sign in and send token
+    const user = await this.userRepository.getById(userId);
+    return generateToken(user);
   }
 
   async getUserById(userId) {
