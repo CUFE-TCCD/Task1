@@ -4,8 +4,8 @@ class LocationService {
   }
 
   async createLocation(locationData) {
-    const { id, name, location, capacity, isAvailable } = locationData;
-    const locationObj = new Location(id, name, location, capacity, isAvailable);
+    const { id, name, address, capacity, available } = locationData;
+    const locationObj = new Location(id, name, location = address, capacity, isAvailable = available);
 
     return await this.locationRepository.create(locationObj);
   }
@@ -19,13 +19,7 @@ class LocationService {
   }
 
   async updateLocation(id, updatedLocationData) {
-    const location = await this.locationRepository.getById(id);
-    if (!location) {
-      throw new Error("Location not found.");
-    }
-
-    Object.assign(location, updatedLocationData);
-    return await this.locationRepository.update(id, location);
+    return await this.locationRepository.update(id, updatedLocationData);
   }
 
   async deleteLocation(id) {

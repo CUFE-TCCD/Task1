@@ -6,6 +6,7 @@ const authRoutes = require("./interfaces/routes/authRoutes");
 const feedbackRoutes = require("./interfaces/routes/feedbackRoutes");
 const locationRoutes = require("./interfaces/routes/locationRoutes");
 const container = require("./container/servicesContainer");
+const globalErrorHandling = require("./interfaces/controllers/errorController");
 
 const app = express();
 app.use((req, res, next) => {
@@ -23,4 +24,5 @@ app.use("/api/v1", feedbackRoutes);
 //app.use("/api/v1", postRoutes);
 app.use("/api/v1", authRoutes);
 
+app.use(globalErrorHandling);
 module.exports = app;

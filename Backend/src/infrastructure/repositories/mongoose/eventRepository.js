@@ -10,15 +10,17 @@ class EventRepository {
   }
 
   async getAll() {
-    return await EventModel.find().exec();
+    return await EventModel.find().select(
+      "title description date location createdAt -_id"
+    );
   }
 
   async update(id, updatedData) {
-    return await EventModel.findByIdAndUpdate(id, updatedData, { new: true }).exec();
+    return await EventModel.findByIdAndUpdate(id, updatedData, { new: true });
   }
 
   async delete(id) {
-    return await EventModel.findByIdAndDelete(id).exec();
+    return await EventModel.findByIdAndDelete(id);
   }
 }
 

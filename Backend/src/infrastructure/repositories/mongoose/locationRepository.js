@@ -6,19 +6,22 @@ class LocationRepository {
   }
 
   async getById(id) {
-    return await LocationModel.findById(id).exec();
+    return await LocationModel.findById(id);
   }
 
   async getAll() {
-    return await LocationModel.find().exec();
+    return await LocationModel.find();
   }
 
   async update(id, updatedData) {
-    return await LocationModel.findByIdAndUpdate(id, updatedData, { new: true }).exec();
+    return await LocationModel.findByIdAndUpdate(id, updatedData, {
+      new: true,
+      runValidators: true,
+    });
   }
 
   async delete(id) {
-    return await LocationModel.findByIdAndDelete(id).exec();
+    return await LocationModel.findByIdAndDelete(id);
   }
 }
 

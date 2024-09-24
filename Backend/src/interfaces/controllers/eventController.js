@@ -21,42 +21,62 @@ const getEventAttendance = async (req, res) => {
   }
 };
 
-const createEvent = async (req, res) => {
+const createEvent = async (req, res, next) => {
   try {
+    const EventService = req.container.resolve(
+      "EventService",
+      new Set(),
+      req.requestScope
+    );
     const eventData = req.body;
     const newEvent = await EventService.createEvent(eventData);
     res.status(201).json(newEvent);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create event" });
+  } catch (err) {
+    next(err);
   }
 };
 
-const getAllEvents = async (req, res) => {
+const getAllEvents = async (req, res, next) => {
   try {
+    const EventService = req.container.resolve(
+      "EventService",
+      new Set(),
+      req.requestScope
+    );
     const events = await EventService.getAllEvents();
     res.status(200).json(events);
   } catch (error) {
-    res.status(500).json({ error: "Failed to get events" });
+    next(error);
   }
 };
 
-const updateEvent = async (req, res) => {
+const updateEvent = async (req, res, next) => {
   const { eventId } = req.params;
   try {
+    const EventService = req.container.resolve(
+      "EventService",
+      new Set(),
+      req.requestScope
+    );
     const updatedEvent = await EventService.updateEvent(eventId, req.body);
     res.status(200).json(updatedEvent);
   } catch (error) {
-    res.status(500).json({ error: `Failed to update event ${eventId}` });
+    next(error);
   }
 };
 
-const deleteEvent = async (req, res) => {
+const deleteEvent = async (req, res, next) => {
   const { eventId } = req.params;
   try {
+    const EventService = req.container.resolve(
+      "EventService",
+      new Set(),
+      req.requestScope
+    );
     await EventService.deleteEvent(eventId);
     res.status(202).json({ success: true, message: "Event deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: `Failed to delete event ${eventId}` });
+  } catch (err) {
+    next(err);
   }
 };
 

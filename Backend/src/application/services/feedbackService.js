@@ -14,6 +14,10 @@ class FeedbackService {
     return await this.feedbackRepository.create(feedbackObj);
   }
 
+  async getAllFeedbacks() {
+    return await this.feedbackRepository.getAllFeedBacks();
+  }
+  
   async getFeedbackByEvent(eventId) {
     return await this.feedbackRepository.findByEventId(eventId);
   }

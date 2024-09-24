@@ -7,10 +7,10 @@ class AuthService {
   }
 
   async signup(userDetails) {
-    const { email, password, firstName, lastName } = userDetails;
+    const { email, password, firstname, lastname } = userDetails;
 
     // Check that fields are not empty
-    if (!email || !password || !firstName || !lastName) {
+    if (!email || !password || !firstname || !lastname) {
       throw new Error("Missing required fields: email, password, firstName, or lastName.");
     }
 
@@ -20,7 +20,8 @@ class AuthService {
     }
 
     // Check password length
-    if (!(password.length < 8)) {
+    if (password.length < 8) {
+      console.log(password.length)
       throw new Error("Password should be at least 8 characters");
     }
 
@@ -29,10 +30,12 @@ class AuthService {
     if (existingUser) {
       throw new Error("User already exists");
     }
-
+    const firstName = firstname;
+    const lastName = lastname;
+    const userDetailsDTO = { email, password, firstName, lastName };
     const newUser = {
       _id: generateUUID(),
-      ...userDetails,
+      ...userDetailsDTO,
       password: await hashPassword(password),
     };
     await this.userRepository.create(newUser);
@@ -63,6 +66,11 @@ class AuthService {
 
     if (!await comparePassword(password, user.password)) {
       throw new Error("Invalid password");
+    }
+
+    // Check password length
+    if (!(password.length < 8)) {
+      throw new Error("Password should be at least 8 characters");
     }
 
     this.userRepository.update(userId, { password: await hashPassword(newPassword) });
