@@ -15,9 +15,9 @@ const createLocation = async (req, res) => {
         "Invalid location please make sure that filed (capacity) is provided and it is a number"
       );
     }
-    if (!locationData.location) {
+    if (!locationData.address) {
       throw new Error(
-        "Invalid location please make sure that filed (location) is provided"
+        "Invalid location please make sure that filed (address) is provided"
       );
     }
 

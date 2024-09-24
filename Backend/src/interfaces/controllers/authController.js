@@ -13,9 +13,9 @@ const login = async (req, res) => {
 };
 
 const signup = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstname, lastname, email, password } = req.body;
   try {
-    const token = await AuthService.signup({ firstName, lastName, email, password });
+    const token = await AuthService.signup({ firstname, lastname, email, password });
     res.status(201).json({ token });
   } catch (error) {
     console.log(error);
