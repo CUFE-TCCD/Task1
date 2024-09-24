@@ -9,11 +9,16 @@ const container = require("./container/servicesContainer");
 
 const app = express();
 app.use((req, res, next) => {
-    req.requestScope = new Map();
-    req.container = container;
-    next();
-  });
-  
+  req.requestScope = new Map();
+  req.container = container;
+  next();
+});
+
+app.use((req, res, next) => {
+  req.requstedTime = new Date().toISOString();
+  console.log("Request at:", req.requstedTime);
+  next();
+});
 app.use(cors());
 app.use(express.json());
 app.use("/api/v1", userRoutes);

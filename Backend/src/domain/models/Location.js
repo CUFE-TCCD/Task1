@@ -1,10 +1,20 @@
 class Location {
-  constructor(id, name, location, capacity, isAvailable = true) {
+  constructor(
+    id,
+    name,
+    address,
+    capacity,
+    isAvailable = true,
+    images = [],
+    googleMapsLink = null
+  ) {
     this.id = id;
     this.name = name;
-    this.location = location;
+    this.address = address;
     this.capacity = capacity;
     this.isAvailable = isAvailable;
+    this.images = images;
+    this.googleMapsLink = googleMapsLink;
   }
 
   checkAvailability() {

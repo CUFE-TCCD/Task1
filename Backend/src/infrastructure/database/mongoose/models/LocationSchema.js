@@ -10,7 +10,7 @@ const LocationSchema = new Schema(
       type: String,
       required: true,
     },
-    location: {
+    address: {
       type: String,
       required: true,
     },
@@ -21,6 +21,14 @@ const LocationSchema = new Schema(
     isAvailable: {
       type: Boolean,
       default: true,
+    },
+    images: {
+      type: [String], // Array of image URLs
+      default: [],
+    },
+    googleMapsLocation: {
+      type: String, // Google Maps location string
+      default: null,
     },
   },
   { timestamps: true }
