@@ -4,8 +4,17 @@ class LocationService {
   }
 
   async createLocation(locationData) {
-    const { id, name, address, capacity, available } = locationData;
-    const locationObj = new Location(id, name, location = address, capacity, isAvailable = available);
+    const { id, name, address, capacity, isAvailable, images, googleMapsLink } =
+      locationData;
+    const locationObj = new Location(
+      id,
+      name,
+      address,
+      capacity,
+      isAvailable,
+      images,
+      googleMapsLink
+    );
 
     return await this.locationRepository.create(locationObj);
   }
