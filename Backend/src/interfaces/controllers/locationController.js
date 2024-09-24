@@ -1,5 +1,5 @@
 const container = require("../../container/servicesContainer");
-const LocationService = container.resolve('LocationService');
+const LocationService = container.resolve("LocationService");
 
 const createLocation = async (req, res) => {
   try {
@@ -54,6 +54,9 @@ const deleteLocation = async (req, res) => {
   const { locationId } = req.params;
   try {
     const deleteedLocation = await LocationService.deleteLocation(locationId);
+    if (!deleteedLocation) {
+      throw new Error("Location not found");
+    }
     res
       .status(202)
       .json({ success: true, message: "Location deleted successfully" });
