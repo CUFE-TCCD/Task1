@@ -19,13 +19,7 @@ class LocationService {
   }
 
   async updateLocation(id, updatedLocationData) {
-    const location = await this.locationRepository.getById(id);
-    if (!location) {
-      throw new Error("Location not found.");
-    }
-
-    Object.assign(location, updatedLocationData);
-    return await this.locationRepository.update(id, location);
+    return await this.locationRepository.update(id, updatedLocationData);
   }
 
   async deleteLocation(id) {
