@@ -8,7 +8,7 @@ class Location {
     images = [],
     googleMapsLink = null
   ) {
-    this.id = id;
+    this._id = id;
     this.name = name;
     this.address = address;
     this.capacity = capacity;
