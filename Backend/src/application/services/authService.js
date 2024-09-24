@@ -66,6 +66,11 @@ class AuthService {
       throw new Error("Invalid password");
     }
 
+    // Check password length
+    if (!(password.length < 8)) {
+      throw new Error("Password should be at least 8 characters");
+    }
+
     this.userRepository.update(userId, { password: await hashPassword(newPassword) });
 
     return generateToken(user);

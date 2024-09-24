@@ -1,5 +1,6 @@
-const container = require("../../container/container");
-const LocationService = container.locationService;
+const container = require("../../container/servicesContainer");
+const LocationService = container.resolve('LocationService');
+
 const createLocation = async (req, res) => {
   try {
     const locationData = req.body;

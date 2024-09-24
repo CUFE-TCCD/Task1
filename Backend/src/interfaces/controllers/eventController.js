@@ -1,3 +1,6 @@
+const container = require("../../container/servicesContainer");
+const EventService = container.resolve('EventService');
+
 const getEventRegistrations = async (req, res) => {
   const {eventId} = req.params;
   try {
@@ -39,6 +42,7 @@ const getAllEvents = async (req, res) => {
     const events = await EventService.getAllEvents();
     res.status(200).json(events);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: "Failed to get events" });
   }
 };
