@@ -4,7 +4,7 @@ const eventController = require("../controllers/eventController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const titleValidation = require("../middlewares/eventTitleValidation");
 
-router.get("/events/:eventId/registrations", authMiddleware, eventController.getEventRegistrations);
+router.get("/events/registrations", authMiddleware, eventController.getEventRegistrations);
 router.get("/events/:eventId/attendance", authMiddleware, eventController.getEventAttendance);
 router.post("/event", titleValidation, eventController.createEvent);
 router.get("/events", eventController.getAllEvents);

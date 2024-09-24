@@ -1,8 +1,6 @@
-const container = require("../../container/container");
-const EventService = container.eventService;
-
 const getEventRegistrations = async (req, res) => {
   try {
+    const EventService = req.container.resolve('EventService', new Set(), req.requestScope);
     const registrations = await EventService.getEventRegistrations();
     res.status(200).json(registrations);
   } catch (error) {
@@ -14,8 +12,21 @@ const getEventRegistrations = async (req, res) => {
 const getEventAttendance = async (req, res) => {
   const { eventId } = req.params;
   try {
-    const attendance = await EventService.getEventAttendance(eventId);
-    res.status(200).json(attendance);
+    const EventService = req.container.resolve('EventService', new Set(), req.requestScope);
+    const UserService = req.container.resolve('UserService', new Set(), req.requestScope);
+
+    const attendances = await EventService.getEventAttendance(eventId);
+    
+    let response = [];
+
+    for(attendance in attendances)
+    {
+      let userId = attendances[attendance].userId;
+      let user = await UserService.getUserById(userId);
+      response.push({name: user.firstName + " " + user.lastName, status: attendances[attendance].attended ? "attended" : "absent"});
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ error: `Failed to get attendance for event ${eventId}` });
   }

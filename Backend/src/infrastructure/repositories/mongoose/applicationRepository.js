@@ -10,7 +10,7 @@ class ApplicationRepository {
   }
 
   async getAll() {
-    return await ApplicationModel.find().exec();
+    return await ApplicationModel.find().select("-attended -_id");
   }
 
   async update(id, updatedData) {
@@ -22,9 +22,6 @@ class ApplicationRepository {
   }
   async getByEventId(eventId) {
     return await ApplicationModel.find({ eventId }).exec();
-  }
-  async getAttendenceByEventId(eventId) {
-    return await ApplicationModel.find({eventId, attended: true})
   }
 }
 
