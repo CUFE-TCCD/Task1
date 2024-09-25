@@ -19,7 +19,7 @@ const Event = () => {
     window.scrollTo({ top: 0, behavior: 'auto' });
 
     const fetchEvents = async () => {
-      const response = await axios.get('https://virtserver.swaggerhub.com/FAROUQDIAAELDIN/Task1TCCD/1.0.0/events');
+      const response = await axios.get('http://localhost:5300/api/v1/events');
       setEvents(response.data);
       console.log(response.data);
     };

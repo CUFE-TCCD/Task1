@@ -27,15 +27,13 @@ export default function NewEventForm({ setOpenForm }) {
 
         const submitEvent = async () => {
             try {
-                await axios.post('https://virtserver.swaggerhub.com/FAROUQDIAAELDIN/Task1TCCD/1.0.0/event', {
+                const response = await axios.post('http://localhost:5300/api/v1/event', {
                     title: eventName,
                     date: eventDate,
                     description: eventDescription,
-                    location: eventLocation
+                    location: eventLocation,
                 });
-                setTimeout(() => {
-                    window.location.reload();
-                }, 4000);
+                console.log(response);
             } catch (error) {
                 console.error(error);
             }
