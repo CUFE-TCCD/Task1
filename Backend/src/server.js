@@ -9,9 +9,9 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(async () => {
+  .then(async (con) => {
     console.log("Database connected successfully");
-
+    //console.log(con.connections);
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);
     });

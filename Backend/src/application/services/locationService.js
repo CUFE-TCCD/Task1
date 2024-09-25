@@ -1,11 +1,31 @@
+const { v4: uuidv4 } = require("uuid");
+const Location = require("../../domain/models/Location");
+
 class LocationService {
   constructor(locationRepository) {
     this.locationRepository = locationRepository;
   }
 
   async createLocation(locationData) {
-    const { id, name, address, capacity, available } = locationData;
-    const locationObj = new Location(id, name, location = address, capacity, isAvailable = available);
+    locationData._id = uuidv4();
+    const {
+      _id,
+      name,
+      address,
+      capacity,
+      isAvailable,
+      images,
+      googleMapsLink,
+    } = locationData;
+    const locationObj = new Location(
+      _id,
+      name,
+      address,
+      capacity,
+      isAvailable,
+      images,
+      googleMapsLink
+    );
 
     return await this.locationRepository.create(locationObj);
   }
