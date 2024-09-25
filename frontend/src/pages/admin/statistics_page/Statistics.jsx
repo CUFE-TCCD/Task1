@@ -71,7 +71,7 @@ const Statistics = () => {
   });
 
   const [currentStatsData, setCurrentStatsData] = useState({
-    labels: ["Users", "Sponsers", "Members"],
+    labels: ["Members", "Admins", "Users"],
     datasets: [
       {
         label: "Count",
@@ -116,25 +116,30 @@ const Statistics = () => {
     },
   };
 
-  // Example of fetching data and updating state
   useEffect(() => {
     async function fetchUserCount() {
+      console.log("Fetching user count");
       try {
         const res = await userCount();
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
+        console.log("API Response:", data[0], data[1], data.members);
         setCurrentStatsData({
-          labels: ["Users", "Sponsers", "Members"],
+          labels: [data[0]._id, data[1]._id, "Users"],
           datasets: [
             {
               label: "Count",
-              data: [data.users, data.sponsors, data.memebers],
+              data: [data[0].count, data[1].count, 0],
               backgroundColor: ["#4CAF50", "#cc3838", "#f59e0b"],
               borderWidth: 1,
             },
           ],
         });
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching user count:", error);
       }
     }
     fetchUserCount();
@@ -186,15 +191,15 @@ const Statistics = () => {
           </p>
           <div className="text-center flex justify-around font-bold text-xl">
             <div>
-              <p>Users</p>
+              <p>{currentStatsData.labels[0]}</p>
               <p className="text-3xl">{currentStatsData.datasets[0].data[0]}</p>
             </div>
             <div>
-              <p>Professors</p>
+              <p>{currentStatsData.labels[1]}</p>
               <p className="text-3xl">{currentStatsData.datasets[0].data[1]}</p>
             </div>
             <div>
-              <p>Admins</p>
+              <p>{currentStatsData.labels[2]}</p>
               <p className="text-3xl">{currentStatsData.datasets[0].data[2]}</p>
             </div>
           </div>
@@ -207,5 +212,4 @@ const Statistics = () => {
   );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export default withSidebar(Statistics);
