@@ -1,12 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaRegImages } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 export default function NewEventForm({ setOpenForm }) {
     const [eventName, setEventName] = useState('');
     const [eventDate, setEventDate] = useState('');
     const [eventDescription, setEventDescription] = useState('');
+    const [eventLocation, setEventLocation] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleClearForm = () => {
+        setEventName('');
+        setEventDate('');
+        setEventDescription('');
+        setEventLocation('');
+        document.querySelectorAll('input').forEach(input => input.value = '');
+        document.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
+    }
+
+    useEffect(() => {
+        if (!loading)
+            return;
+
+        const submitEvent = async () => {
+            try {
+                const response = await axios.post('http://localhost:5300/api/v1/event', {
+                    title: eventName,
+                    date: eventDate,
+                    description: eventDescription,
+                    location: eventLocation,
+                });
+                console.log(response);
+            } catch (error) {
+                console.error(error);
+            }
+            finally {
+                setLoading(false);
+            }
+        };
+        submitEvent();
+    }, [loading]);
 
     return (
         <div className={`absolute bg-white w-full h-fit pb-6 z-40 transition-all duration-[800ms] ease-in-out`}>
@@ -36,11 +72,16 @@ export default function NewEventForm({ setOpenForm }) {
                     </div>
                     <textarea onChange={(e) => setEventDescription(e.target.value)} placeholder="ea: Super awesome event" className={`w-full lg:w-1/3 h-40 p-2 border-2 border-[#a79d9d] rounded-lg ${eventDescription === "" ? "bg-gray-200" : ""}`} />
                 </div>
+                <div>
+                    <p className="font-semibold text-lg">d.Event Location</p>
+                    <p className="font-semibold text-sm mb-2">tell the audience where the buzz is happening</p>
+                    <input onChange={(e) => setEventLocation(e.target.value)} type="text" placeholder="ea: main giza campus blue room" className={`w-full lg:w-1/3 p-2 border-2 border-[#a79d9d] rounded-lg ${eventLocation === "" ? "bg-gray-200" : ""}`} />
+                </div>
 
                 {/* media section here*/}
                 <p className="font-semibold text-2xl -mb-3 border-b border-black mt-8">{"2) Media Attachments"}</p>
                 <div>
-                    <p className="font-semibold text-lg">d.Event Media</p>
+                    <p className="font-semibold text-lg">e.Event Media</p>
                     <p className="font-semibold text-sm mb-2">Any Media you wish to be displayed on the event page</p>
                     <div className="relative w-full lg:w-1/3 h-80 border-2 border-[#a79d9d] bg-gray-200 rounded-lg flex-col flex items-center justify-center">
                         <FaRegImages size={50} />
@@ -49,7 +90,7 @@ export default function NewEventForm({ setOpenForm }) {
                     </div>
                 </div>
                 <div>
-                    <p className="font-semibold text-lg">e.Downloadable Content</p>
+                    <p className="font-semibold text-lg">f.Downloadable Content</p>
                     <p className="font-semibold text-sm mb-2">Any media or files you wish for the audience to be able to download off the page</p>
                     <div className="relative w-full lg:w-1/3 h-80 border-2 border-[#a79d9d] bg-gray-200 rounded-lg flex-col flex items-center justify-center">
                         <FaRegImages size={50} />
@@ -67,9 +108,11 @@ export default function NewEventForm({ setOpenForm }) {
                 {/*final section for submission or cancelation buttons*/}
                 <hr className="border-y border-[#a79d9d]" />
                 <div className="flex justify-center gap-4 rounded-lg border-2 border-[#a79d9d] p-4 w-fit mx-auto bg-gray-300">
-                    <button onClick={() => setOpenForm(false)} className="font-semibold px-6 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Cancel</button>
-                    <button className="font-semibold px-6 py-1 rounded-lg bg-[#285D7C] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Clear</button>
-                    <button className="font-semibold px-6 py-1 rounded-lg bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Save</button>
+                    {loading ? <AiOutlineLoading3Quarters className="animate-spin" size={30} /> : <>
+                        <button onClick={() => setOpenForm(false)} className="font-semibold px-6 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Cancel</button>
+                        <button onClick={() => handleClearForm()} className="font-semibold px-6 py-1 rounded-lg bg-[#285D7C] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Clear</button>
+                        <button onClick={() => setLoading(true)} className="font-semibold px-6 py-1 rounded-lg bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Save</button>
+                    </>}
                 </div>
             </div>
         </div>

@@ -1,10 +1,26 @@
-const userService = require("../application/services/userService");
-
-exports.createUser = async (req, res) => {
+// const container = require("../../container/container");
+// const UserService = container.userService;
+const getUsersCountByRole = async (req, res) => {
   try {
-    const user = await userService.createUser(req.body);
-    res.status(201).json(user);
+    const UserService = req.container.resolve('UserService', new Set(), req.requestScope);
+    const userCounts = await UserService.getCount();
+    res.status(200).json(userCounts);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ error: "Failed to get user count by role" });
   }
+};
+
+const getAllUsers = async (req, res) => {
+  try {
+    const UserService = req.container.resolve('UserService', new Set(), req.requestScope);
+    const users = await UserService.getAllUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to get users" });
+  }
+};
+
+module.exports = {
+  getUsersCountByRole,
+  getAllUsers,
 };

@@ -1,3 +1,10 @@
-require("dotenv").config();
+const connectionString = process.env.MONGODB_URI;
+const port = process.env.MONGODB_PORT;
+if (!connectionString) {
+  console.error('MongoDB connection string is not defined in .env');
+}
 
-exports.cloudConnectString = process.env.MONGODB_URI;
+module.exports = {
+  connectionString,
+  port,
+};

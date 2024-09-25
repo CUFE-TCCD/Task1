@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const RoomSchema = new Schema(
+const LocationSchema = new Schema(
   {
     _id: {
       type: String, // UUID
@@ -10,7 +10,7 @@ const RoomSchema = new Schema(
       type: String,
       required: true,
     },
-    location: {
+    address: {
       type: String,
       required: true,
     },
@@ -22,8 +22,16 @@ const RoomSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    images: {
+      type: [String], // Array of image URLs
+      default: [],
+    },
+    googleMapsLocation: {
+      type: String, // Google Maps location string
+      default: null,
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Room", RoomSchema);
+module.exports = mongoose.model("Location", LocationSchema);

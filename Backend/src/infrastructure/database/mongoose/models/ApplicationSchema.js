@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const FeedbackSchema = new Schema(
+const ApplicationSchema = new Schema(
   {
     _id: {
       type: String, // UUID
@@ -16,12 +16,22 @@ const FeedbackSchema = new Schema(
       ref: "Event",
       required: true,
     },
-    feedback: {
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+    qrCodeUrl: {
       type: String,
       required: true,
     },
+    attended: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
-  { timestamps: true }
+  { timestamps: { createdAt: "appliedAt" } }
 );
 
-module.exports = mongoose.model("Feedback", FeedbackSchema);
+module.exports = mongoose.model("Application", ApplicationSchema);
