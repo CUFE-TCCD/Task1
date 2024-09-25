@@ -8,7 +8,10 @@ const Users = () => {
   useEffect(() => {
     async function fetchData(){
       try{
-        const Data=await getUsers();
+        const response=await getUsers();
+        const Data = await response.json();
+        console.log(Data);
+        console.log(response);
         setUsers(Data);
       }catch(err){console.log(err)}
     }
@@ -38,7 +41,7 @@ const Users = () => {
   };
 
   // Filtered users based on selected filter
-  const filteredUsers = users.filter((user) => (filter === "All" ? true : user.role === filter));
+  const filteredUsers = users.filter((user) => (filter === "All" ? true : user.role.toLowerCase() === filter.toLowerCase()));
  
   return (
     <div>
@@ -51,8 +54,8 @@ const Users = () => {
         <button onClick={() => handleFilterChange("Admin")} style={filter === "Admin" ? activeFilterStyle : filterButtonStyle}>
           Admins
         </button>
-        <button onClick={() => handleFilterChange("User")} style={filter === "User" ? activeFilterStyle : filterButtonStyle}>
-          Users
+        <button onClick={() => handleFilterChange("Member")} style={filter === "Member" ? activeFilterStyle : filterButtonStyle}>
+          Members
         </button>
         <button onClick={() => handleFilterChange("Moderator")} style={filter === "Moderator" ? activeFilterStyle : filterButtonStyle}>
           Moderators
@@ -70,7 +73,7 @@ const Users = () => {
         <tbody>
           {filteredUsers.map((user) => (
             <tr key={user.userId} onClick={() => handleUserClick(user)} style={rowStyle}>
-              <td style={cellStyle}>{user.firstname}</td>
+              <td style={cellStyle}>{user.firstName}</td>
               <td style={cellStyle}>{user.email}</td>
               <td style={cellStyle}>{user.role}</td>
             </tr>
@@ -81,10 +84,10 @@ const Users = () => {
       {/* Modal */}
       {isModalOpen && selectedUser && (
         <div style={modalStyle}>
-          <h3>{selectedUser.firstname}'s Information</h3>
+          <h3>{selectedUser.firstName}'s Information</h3>
           <p><strong>Email:</strong> {selectedUser.email}</p>
           <p><strong>Account Type:</strong> {selectedUser.role}</p>
-          <p><strong>Last firstname:</strong> {selectedUser.lastname}</p>
+          <p><strong>Last Name:</strong> {selectedUser.lastName}</p>
           <button onClick={closeModal} style={{ marginTop: "10px", padding: "8px 12px" }}>
             Close
           </button>
