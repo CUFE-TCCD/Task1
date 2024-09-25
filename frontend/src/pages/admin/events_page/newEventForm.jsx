@@ -3,8 +3,8 @@ import { FaRegImages } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PropTypes from 'prop-types';
-import axios from 'axios';
 
+import { addNewEvent } from "@/endpoints/eventsEndpoints";
 export default function NewEventForm({ setOpenForm }) {
     const [eventName, setEventName] = useState('');
     const [eventDate, setEventDate] = useState('');
@@ -24,24 +24,13 @@ export default function NewEventForm({ setOpenForm }) {
     useEffect(() => {
         if (!loading)
             return;
+        
+        console.log(eventName, eventDate, eventDescription, eventLocation);
+        addNewEvent(eventName, eventDate, eventDescription, eventLocation)
+        .then(() => {
+        setLoading(false);
+        });
 
-        const submitEvent = async () => {
-            try {
-                const response = await axios.post('http://localhost:5300/api/v1/event', {
-                    title: eventName,
-                    date: eventDate,
-                    description: eventDescription,
-                    location: eventLocation,
-                });
-                console.log(response);
-            } catch (error) {
-                console.error(error);
-            }
-            finally {
-                setLoading(false);
-            }
-        };
-        submitEvent();
     }, [loading]);
 
     return (

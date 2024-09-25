@@ -5,9 +5,10 @@ import FullEventView from "./fullEventView";
 import '/src/styles/eventPage.css';
 import NewEventForm from "./newEventForm";
 import EditEventForm from "./editEventForm";
+import { fetchEvents } from "@/endpoints/eventsEndpoints";
+
 
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 const Event = () => {
   const [addNewEvent, setAddNewEvent] = useState(false);
@@ -19,13 +20,8 @@ const Event = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
 
-    const fetchEvents = async () => {
-      const response = await axios.get('http://localhost:5300/api/v1/events');
-      setEvents(response.data);
-      console.log(response.data);
-      setFetching(false);
-    };
-    fetchEvents();
+    fetchEvents(setEvents);
+    setFetching(false);
   }, []);
 
   const eventTypes = [

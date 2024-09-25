@@ -23,13 +23,16 @@ export default function EventPoster({ eventData, triggerEdit, triggerDetails }) 
 
     return (
         <>
-            {deleteEvent && <DeleteEventConfirmPopup setOpenPopup={setDeleteEvent}/> }
+            {deleteEvent && <DeleteEventConfirmPopup eventData={eventData} setOpenPopup={setDeleteEvent}/> }
             <div className="group flex-none sm:flex hidden w-full h-full z-10 gap-4 border-b-2 border-[#a79d9d] py-4">
                 <img src={fakeEventImage} alt="event" className="w-1/3 object-fit rounded-lg -z-10" />
-                <div className={`w-full py-3 px-6 relative border-l-2 border-[#a79d9d] ${fadeIn} transition-all duration-[400ms] ease-in-out`}>
+                <div className={`w-2/3 py-3 px-6 relative border-l-2 border-[#a79d9d] ${fadeIn} transition-all duration-[400ms] ease-in-out`}>
                     <p className="font-bold text-2xl">{eventData.title}</p>
-                    <p className="text-md mt-1 font-medium flex gap-1 items-end"><p className="font-bold text-lg">Date:</p>{formattedDate}</p>
-                    <p className="text-md mt-2 font-medium flex gap-1 leading-6 items-end"><p className="font-bold text-lg">Description:</p>{eventData.description}</p>
+                    <div className="text-md mt-1 font-medium flex gap-1 items-end"><p className="font-bold text-lg">Date:</p>{formattedDate}</div>
+                    <div className="text-md mt-2 font-medium flex gap-1 leading-6">
+                        <p className="font-bold">Description:</p>
+                        <span className="break-words whitespace-pre-wrap max-w-[88%]">{eventData.description}</span>
+                    </div>
                     <div className="gap-5 flex mt-4">
                         <button onClick={() => triggerDetails(eventData)} className="font-semibold px-4 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">More Details</button>
                         <button onClick={() => triggerEdit(eventData)} className="font-semibold px-4 py-1 rounded-lg bg-[#285D7C] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Edit</button>
