@@ -32,7 +32,8 @@ class EventService {
   }
 
   async getAllEvents() {
-    return await this.eventRepository.getAll();
+    const projection = "title description date location createdAt";
+    return await this.eventRepository.getAll(projection);
   }
 
   async updateEvent(eventID, newEvent) {
