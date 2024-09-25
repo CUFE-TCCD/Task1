@@ -27,15 +27,13 @@ export default function NewEventForm({ setOpenForm }) {
 
         const submitEvent = async () => {
             try {
-                await axios.post('https://virtserver.swaggerhub.com/FAROUQDIAAELDIN/Task1TCCD/1.0.0/event', {
+                const response = await axios.post('http://localhost:5300/api/v1/event', {
                     title: eventName,
                     date: eventDate,
                     description: eventDescription,
-                    location: eventLocation
+                    location: eventLocation,
                 });
-                setTimeout(() => {
-                    window.location.reload();
-                }, 4000);
+                console.log(response);
             } catch (error) {
                 console.error(error);
             }
@@ -113,7 +111,7 @@ export default function NewEventForm({ setOpenForm }) {
                     {loading ? <AiOutlineLoading3Quarters className="animate-spin" size={30} /> : <>
                         <button onClick={() => setOpenForm(false)} className="font-semibold px-6 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Cancel</button>
                         <button onClick={() => handleClearForm()} className="font-semibold px-6 py-1 rounded-lg bg-[#285D7C] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Clear</button>
-                        <button onClick={() => setLoading(true)} className="font-semibold px-6 py-1 rounded-lg bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Save</button>
+                        <button onClick={() => setLoading(true)} className="font-semibold px-6 py-1 rounded-lg bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Create</button>
                     </>}
                 </div>
             </div>
