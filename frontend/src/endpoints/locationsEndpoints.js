@@ -1,7 +1,5 @@
+import { getToken } from "../utils/helper";
 
-const getToken = () => {
-  return localStorage.getItem('token'); 
-};
 
 
 const getAllLocations = async () => {
