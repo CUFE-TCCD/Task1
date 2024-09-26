@@ -11,9 +11,9 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(async () => {
+  .then(async (con) => {
     console.log("Database connected successfully");
-
+    //console.log(con.connections);
     await eventSeed();
     await feedbackSeed();
     app.listen(port, () => {

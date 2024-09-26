@@ -6,10 +6,10 @@ const titleValidation = require("../middlewares/eventTitleValidation");
 
 router.get("/events/:eventId/registrations", authMiddleware, eventController.getEventRegistrations);
 router.get("/events/:eventId/attendance", authMiddleware, eventController.getEventAttendance);
-router.post("/event", titleValidation, eventController.createEvent);
+router.post("/event", authMiddleware,titleValidation, eventController.createEvent);
 router.get("/events", eventController.getAllEvents);
-router.put("/events/:eventId", titleValidation, eventController.updateEvent);
-router.delete("/events/:eventId",  eventController.deleteEvent);
+router.put("/events/:eventId", authMiddleware,titleValidation, eventController.updateEvent);
+router.delete("/events/:eventId", authMiddleware, eventController.deleteEvent);
 router.get('/events/finished', eventController.getFinishedEvents);
 
 

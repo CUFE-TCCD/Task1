@@ -3,8 +3,8 @@ import { FaRegImages } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PropTypes from 'prop-types';
-import axios from 'axios';
 
+import { addNewEvent } from "@/endpoints/eventsEndpoints";
 export default function NewEventForm({ setOpenForm }) {
     const [eventName, setEventName] = useState('');
     const [eventDate, setEventDate] = useState('');
@@ -24,26 +24,13 @@ export default function NewEventForm({ setOpenForm }) {
     useEffect(() => {
         if (!loading)
             return;
+        
+        console.log(eventName, eventDate, eventDescription, eventLocation);
+        addNewEvent(eventName, eventDate, eventDescription, eventLocation)
+        .then(() => {
+        setLoading(false);
+        });
 
-        const submitEvent = async () => {
-            try {
-                await axios.post('https://virtserver.swaggerhub.com/FAROUQDIAAELDIN/Task1TCCD/1.0.0/event', {
-                    title: eventName,
-                    date: eventDate,
-                    description: eventDescription,
-                    location: eventLocation
-                });
-                setTimeout(() => {
-                    window.location.reload();
-                }, 4000);
-            } catch (error) {
-                console.error(error);
-            }
-            finally {
-                setLoading(false);
-            }
-        };
-        submitEvent();
     }, [loading]);
 
     return (
@@ -113,7 +100,7 @@ export default function NewEventForm({ setOpenForm }) {
                     {loading ? <AiOutlineLoading3Quarters className="animate-spin" size={30} /> : <>
                         <button onClick={() => setOpenForm(false)} className="font-semibold px-6 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Cancel</button>
                         <button onClick={() => handleClearForm()} className="font-semibold px-6 py-1 rounded-lg bg-[#285D7C] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Clear</button>
-                        <button onClick={() => setLoading(true)} className="font-semibold px-6 py-1 rounded-lg bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Save</button>
+                        <button onClick={() => setLoading(true)} className="font-semibold px-6 py-1 rounded-lg bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Create</button>
                     </>}
                 </div>
             </div>

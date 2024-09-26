@@ -1,7 +1,7 @@
 const titleValidation = (req, res, next) => {
   const { title } = req.body;
 
-  const validator = /^[A-Za-z\s]+$/;
+  const validator = /^[a-zA-Z0-9\s]+$/;
   if (!validator.test(title)) {
     const error = new Error("The name must contain characters only");
     error.statusCode = 400;

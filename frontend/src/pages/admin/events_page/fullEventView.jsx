@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { FaRegImages } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import PropTypes from 'prop-types';
 
