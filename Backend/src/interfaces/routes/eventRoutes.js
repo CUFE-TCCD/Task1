@@ -10,5 +10,7 @@ router.post("/event", titleValidation, eventController.createEvent);
 router.get("/events", eventController.getAllEvents);
 router.put("/events/:eventId", titleValidation, eventController.updateEvent);
 router.delete("/events/:eventId",  eventController.deleteEvent);
+router.get('/events/finished', eventController.getFinishedEvents);
+
 
 module.exports = router;

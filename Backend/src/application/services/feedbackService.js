@@ -29,6 +29,10 @@ class FeedbackService {
   async deleteFeedback(id) {
     return await this.feedbackRepository.delete(id);
   }
+
+  async getFeedbackCountByType() {
+    return await this.feedbackRepository.countFeedbackByType();
+  }
 }
 
 module.exports = FeedbackService;

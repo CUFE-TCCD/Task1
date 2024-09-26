@@ -64,6 +64,11 @@ class EventService {
   async getEventAttendance() {
     return await this.applicationRepository.getByEventId();
   }
+
+  async getSpecificFinishedEvents() {
+    return await this.eventRepository.findFinishedEventsBySpecificNames();
+  }
+  
 }
 
 module.exports = EventService;

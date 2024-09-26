@@ -22,6 +22,30 @@ class EventRepository {
   async delete(id) {
     return await EventModel.findByIdAndDelete(id);
   }
+
+  async findLastFinishedEventByName(eventName) {
+    const currentDate = new Date();
+    return await EventModel.findOne({
+      title: eventName,
+      date: { $lt: currentDate }
+    })
+      .sort({ date: -1 })
+      .select('title capacity');
+  }
+
+  async findFinishedEventsBySpecificNames() {
+    const eventNames = ["Job Fair", "Research Day", "Orientation"];
+    const events = [];
+
+    for (const name of eventNames) {
+      const event = await this.findLastFinishedEventByName(name);
+      if (event) {
+        events.push(event);
+      }
+    }
+
+    return events;
+  }
 }
 
 module.exports = EventRepository;

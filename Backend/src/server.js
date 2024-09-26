@@ -2,6 +2,8 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const config = require("./infrastructure/config/dbConfig");
 const app = require("./app");
+const eventSeed = require('./infrastructure/database/mongoose/seeds/eventSeed');
+const feedbackSeed = require('./infrastructure/database/mongoose/seeds/feedbackSeed');
 const port = config.port;
 const connectionurl = config.connectionString;
 mongoose
@@ -12,6 +14,8 @@ mongoose
   .then(async () => {
     console.log("Database connected successfully");
 
+    await eventSeed();
+    await feedbackSeed();
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);
     });

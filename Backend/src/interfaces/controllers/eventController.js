@@ -78,6 +78,19 @@ const deleteEvent = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+
+};
+
+  
+const getFinishedEvents = async (req, res) => {
+  try {
+    const EventService = req.container.resolve("EventService", new Set(), req.requestScope);
+    const finishedEvents = await EventService.getSpecificFinishedEvents();
+    res.status(200).json(finishedEvents);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to get finished events" });
+  }
 };
 
 module.exports = {
@@ -87,4 +100,5 @@ module.exports = {
   getAllEvents,
   updateEvent,
   deleteEvent,
+  getFinishedEvents,
 };

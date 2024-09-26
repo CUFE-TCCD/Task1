@@ -82,4 +82,5 @@ container.register(
   ['ApplicationRepository']
 );
 
+
 module.exports = container;

@@ -10,7 +10,16 @@ const getAllFeedbacks = async (req, res) => {
     res.status(500).json({ error: "Failed to get feedbacks" });
   }
 };
-
+const getFeedbackCountByType = async (req, res) => {
+  try {
+    const feedbackCount = await FeedbackService.getFeedbackCountByType();
+    res.status(200).json(feedbackCount);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to count feedback" });
+  }
+};
 module.exports = {
   getAllFeedbacks,
+  getFeedbackCountByType
 };

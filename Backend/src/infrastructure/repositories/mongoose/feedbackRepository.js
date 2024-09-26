@@ -28,6 +28,32 @@ class FeedbackRepository {
   async getAllFeedBacks(){
     return await FeedbackModel.find().exec();
   }
+
+  async countFeedbackByType() {
+    const feedbackCount = await FeedbackModel.aggregate([
+      {
+        $group: {
+          _id: '$type',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const result = {
+      positive: 0,
+      negative: 0,
+    };
+
+    feedbackCount.forEach((item) => {
+      if (item._id === true) {
+        result.positive = item.count;
+      } else {
+        result.negative = item.count;
+      }
+    });
+
+    return result;
+  }
 }
 
 module.exports = FeedbackRepository;
