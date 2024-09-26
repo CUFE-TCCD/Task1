@@ -5,3 +5,12 @@ export function getWindowDimensions() {
     height,
   };
 }
+
+export const getToken = () => {
+  return sessionStorage.getItem("token");
+};
+
+
+export const removeToken=()=>{
+  return sessionStorage.clear();
+}

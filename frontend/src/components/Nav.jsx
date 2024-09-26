@@ -1,8 +1,17 @@
 import React from "react";
 import tccdLogo from "@/assets/tccd_logo.png";
 import { Link } from "react-router-dom";
+import { removeToken } from "../utils/helper";
 
 const Nav = () => {
+  const token = sessionStorage.getItem("token");
+
+  function handleLogout() {
+    removeToken();
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  }
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -17,9 +26,21 @@ const Nav = () => {
         </div>
 
         <div className="flex lg:flex-1 lg:justify-end">
-          <Link to={'/sign-in'} className="text-lg font-semibold leading-6 text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+          {!token ? (
+            <Link
+              to={"/sign-in"}
+              className="text-lg font-semibold leading-6 text-gray-900"
+            >
+              Log in <span aria-hidden="true">&rarr;</span>
+            </Link>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="text-lg font-semibold leading-6 text-gray-900"
+            >
+              log out
+            </button>
+          )}
         </div>
       </nav>
     </header>

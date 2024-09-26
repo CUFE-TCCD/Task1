@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
 import tccdLogo from "@/assets/tccd_logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GradientBgTop from "../../components/GradientBgTop";
 import { signUp } from "../../endpoints/authEndpoints";
+import { removeToken } from "../../utils/helper";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [signUpForm, setSignUpForm] = useState({
     firstname: "",
     lastname: "",
     email: "",
     password: "",
+  });
+  const [notification, setNotification] = useState({
+    isVisible: false,
+    type: "",
+    message: "",
   });
 
   const handleInputChange = (e) => {
@@ -26,13 +33,47 @@ const Signup = () => {
       const response = await signUp(signUpForm);
       const data = await response.json();
       console.log(data);
+
+      sessionStorage.setItem("token", data.token);
+      setNotification({
+        isVisible: true,
+        type: "success",
+        message: "welcome back!",
+      });
     } catch (error) {
-      console.log(error);
+      const errorMessage = await error.json();
+      setNotification({
+        isVisible: true,
+        type: "failed",
+        message:
+          errorMessage.error || "something went wrong please try again later",
+      });
+    } finally {
+      setTimeout(() => {
+        setNotification({
+          isVisible: false,
+          type: "",
+          message: "",
+        });
+        navigate("/admin/statistics");
+      }, 1000);
     }
   }
 
+  useEffect(() => {
+    removeToken();
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 relative">
+      {notification.isVisible && (
+        <Notification
+          type={notification.type}
+          message={notification.message}
+          visible={true}
+        />
+      )}
+
       <GradientBgTop />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">

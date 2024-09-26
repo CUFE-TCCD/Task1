@@ -7,6 +7,9 @@ export const login = async (email, password) => {
       },
       body: JSON.stringify({ email, password }),
     });
+    if(response.status!==200){
+      throw response;
+    }
     return response;
   } catch (error) {
     throw error;
@@ -22,6 +25,9 @@ export const signUp = async (sign_up_form) => {
       },
       body: JSON.stringify(sign_up_form),
     });
+    if(response.status!==201){
+      throw response;
+    }
     return response;
   } catch (error) {
     throw error;
