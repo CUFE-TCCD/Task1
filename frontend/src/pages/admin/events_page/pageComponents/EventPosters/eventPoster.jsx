@@ -48,7 +48,7 @@ export default function EventPoster({ eventData, triggerEdit, triggerDetails }) 
                     <p className="text-xs">{formattedDate}</p>
                     <p className="text-xs mt-2 group-hover:block hidden">Description: {eventData.description}</p>
                     <div className="gap-2 mt-2 group-hover:flex hidden">
-                        <button onClick={() => triggerDetails(eventData)} className="font-semibold px-4 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">More Details</button>
+                        <button className="font-semibold px-4 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">More Details</button>
                         <button onClick={() => triggerEdit(eventData)} className="font-semibold px-2 py-1 rounded-lg text-xs bg-[#285D7C] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Edit</button>
                         <button onClick={() => setDeleteEvent(true)} className="font-semibold px-2 py-1 rounded-lg text-xs bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Delete</button>
                     </div>
