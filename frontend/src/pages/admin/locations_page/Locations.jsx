@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import withSidebar from "@/components/HOC/withSidebar";
 import Location from '@/components/admin/Location';
 import ModalForm from "@/components/admin/ModalForm";
+import {getAllLocations , deleteLocation , updateLocation , addLocation} from '../../../endpoints/locationsEndpoints'
+
 
 let dummyLocationData = [
   {
@@ -36,33 +38,66 @@ let dummyLocationData = [
 ];
 
 const Locations = () => {
-  const [allLocations, setAllLocations] = useState(dummyLocationData);
-
-  function DeleteLocation(id) {
-    setAllLocations((locations) => locations.filter((location) => location.id !== id));
-  }
-
-  function UpdateLocation(updatedLocation) {
-    setAllLocations((locations) =>
-      locations.map((location) =>
-        location.id === updatedLocation.id ? updatedLocation : location
-      )
-    );
-  }
-
+  const [allLocations, setAllLocations] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [authError , setAuthError] = useState(false)
+
+  useEffect(() => {
+    const loadLocations = async () => {
+      try {
+        const data = await getAllLocations();
+        setAllLocations(data.data);
+        setAuthError(false)
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+        setAuthError(true)
+      }
+    };
+    loadLocations();
+  }, []);
+
+  async function DeleteLocation(id) {
+    try {
+      console.log(id)
+      await deleteLocation(id);
+      setAllLocations((locations) => locations.filter((location) => location._id !== id));
+    } catch (error) {
+      console.error("Error deleting location:", error);
+    }
+  }
+
+  async function UpdateLocation(updatedLocation) {
+    try {
+      const updatedData = await updateLocation(updatedLocation._id, updatedLocation);
+      setAllLocations((locations) =>
+        locations.map((location) => (location._id === updatedLocation._id ? updatedLocation : location))
+      );
+    } catch (error) {
+      console.error("Error updating location:", error);
+    }
+  }
+
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleAddLocation = (newLocation) => {
-    newLocation.id = allLocations.length + 2; 
-    setAllLocations([...allLocations, newLocation]);
-    setIsModalOpen(false);
+  const handleAddLocation = async (newLocation) => {
+    try {
+      const addedLocation = await addLocation(newLocation);
+      console.log(addedLocation)
+      setIsModalOpen(false);
+      window.location.reload();
+    } catch (error) {
+      console.log(error.message)
+      console.error("Error adding location:", error);
+    }
   };
 
+  console.log(allLocations)
+
   return (
-    <div>
+    !authError ?
+    <div  >  
       <div className="flex justify-center mt-8">
         <button
           className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300"
@@ -77,7 +112,7 @@ const Locations = () => {
           LocationData={LocationData}
           isModalFormOpen={isModalOpen}
           onUpdateLocation={UpdateLocation}
-          key={LocationData.id}
+          key = {LocationData._id}
         />
       ))}
       <ModalForm
@@ -86,6 +121,8 @@ const Locations = () => {
         onSubmit={handleAddLocation}
       />
     </div>
+    :
+    <h1 className="flex justify-center text-2xl">Authenticatie first</h1>
   );
 };
 
