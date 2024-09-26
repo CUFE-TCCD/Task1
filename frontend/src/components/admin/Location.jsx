@@ -17,6 +17,10 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
   const [newImageUrl, setNewImageUrl] = useState(""); 
   const [toReload , setToReload] = useState('f')
 
+  useEffect(function () {
+    updatedData._id = LocationData._id
+  })
+
   const handleUpdate = () => {
     onUpdateLocation(updatedData);
     setViewOrUpdateMode(true);
@@ -31,9 +35,16 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
     setViewOrUpdateMode(true);
   };
 
+  const handleGoogleMaps = () => {
+    if(!updatedData.googleMapsLocation){
+      return alert('oops there is a problem with the google maps link')
+    }
+    window.open(updatedData.googleMapsLocation, "_blank")
+  }
+
   const handleDeleteImage = (index) => {
-    const updatedImages = updatedData.Images.filter((_, i) => i !== index);
-    setUpdatedData({ ...updatedData, Images: updatedImages })
+    const updatedImages = updatedData.images.filter((_, i) => i !== index);
+    setUpdatedData({ ...updatedData, images: updatedImages })
     setToReload((reload) => {
       if(reload === 'f')
       {
@@ -45,19 +56,36 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
     })
   };
 
-  const handleAddImage = () => {
-    if (newImageUrl) {
-      setUpdatedData({ ...updatedData, Images: [...updatedData.Images, newImageUrl] });
-      setNewImageUrl("");
-      setToReload((reload) => {
-        if(reload === 'f')
-        {
-          return 'g'
-        }
-        if(reload === 'g'){
-          return 'f'
-        }
-      })
+  const handleAddImage = async (e) => {
+    e.preventDefault();
+  
+    try {
+      new URL(newImageUrl); 
+      
+      
+      const checkImage = (url) => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.src = url;
+  
+          img.onload = () => resolve(true); 
+          img.onerror = () => reject(false); 
+        });
+      };
+  
+      try {
+        await checkImage(newImageUrl);
+  
+        setUpdatedData({ ...updatedData, images: [...updatedData.images, newImageUrl] });
+        setNewImageUrl("");
+        setToReload((reload) => (reload === 'f' ? 'g' : 'f'));
+        
+      } catch {
+        alert('Enter a valid image');
+      }
+      
+    } catch (e) {
+      alert("Please enter a valid URL.");
     }
   };
 
@@ -69,14 +97,14 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
   return (
     <div className="location-block h-[29rem] overflow-y-scroll bg-white shadow-lg rounded-lg overflow-hidden my-8 w-full max-w-screen-lg mx-auto flex flex-col lg:flex-row">
       <div className="relative w-full lg:w-1/2">
-        <Carousel
+       {LocationData.images &&  <Carousel
           responsive={responsive}
           showDots={true}
           infinite={true}
           swipeable={false}
           removeArrowOnDeviceType={isModalOpen || isModalFormOpen ? 'AnyDesign' : ''}
         >
-          {LocationData.Images.map((image, index) => (
+          {LocationData.images.map((image, index) => (
             <img
               key={index}
               src={image}
@@ -84,17 +112,17 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
               className="w-full h-64 object-cover sm:h-96 lg:h-[27rem]"
             />
           ))}
-        </Carousel>
+        </Carousel>}
       </div>
 
       <div className="p-6 w-full lg:w-1/2 relative flex flex-col mx-2 mr-8">
         {viewOrUpdateMode ? (
-          <h2 className="text-2xl font-semibold mb-2">{updatedData.locationName}</h2>
+          <h2 className="text-2xl font-semibold mb-2">{updatedData.name ? updatedData.name : 'unknown'}</h2>
         ) : (
           <input
-            value={updatedData.locationName}
+            value={updatedData.name}
             className="text-2xl font-semibold mb-2"
-            onChange={(e) => setUpdatedData({ ...updatedData, locationName: e.target.value })}
+            onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
           />
         )}
 
@@ -102,7 +130,7 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
           <p className="text-gray-700">
             <strong>Address:</strong>{" "}
             {viewOrUpdateMode ? (
-              updatedData.address
+              updatedData.address ? updatedData.address : 'unknown'
             ) : (
               <input
                 type="text"
@@ -115,7 +143,7 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
           <p className="text-gray-700">
             <strong>Capacity:</strong>{" "}
             {viewOrUpdateMode ? (
-              updatedData.capacity
+              updatedData.capacity ? updatedData.capacity : 'unknown'
             ) : (
               <input
                 type="number"
@@ -128,13 +156,13 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
           <p className="text-gray-700">
             <strong>Available:</strong>{" "}
             {viewOrUpdateMode ? (
-              <span className={updatedData.available ? 'text-green-600 text-bold' :'text-red-600 text-bold'}>{updatedData.available ? "Yes" : "No"}</span>
+              <span className={updatedData.isAvailable ? 'text-green-600 text-bold' :'text-red-600 text-bold'}>{updatedData.isAvailable === true ? 'Yes' : (updatedData.available ? "Yes" : "No")}</span>
               
             ) : (
               <select
                 className="bg-gray-200 border-black border-2 rounded-md"
-                value={updatedData.available ? "Yes" : "No"}
-                onChange={(e) => setUpdatedData({ ...updatedData, available: e.target.value === "Yes" })}
+                value={updatedData.isAvailable ? "Yes" : "No"}
+                onChange={(e) => setUpdatedData({ ...updatedData, isAvailable: e.target.value === "Yes" })}
               >
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
@@ -145,7 +173,7 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
 
         <div className="mt-auto lg:absolute lg:bottom-0 lg:w-full lg:p-6 mr-5">
           <button
-            onClick={() => window.open(updatedData.googleMapsLink, "_blank")}
+            onClick={handleGoogleMaps}
             className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300 my-2"
           >
             Show on Google Maps
@@ -176,11 +204,16 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
           )}
 
           <button
-            onClick={() => DeleteLocation(updatedData.id)}
+            onClick={() => {
+              const confirmDelete = window.confirm("Are you sure you want to delete this location?");
+              if (confirmDelete) {
+                DeleteLocation(updatedData._id);
+              }
+            }}
             className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition-all duration-300 my-1"
-          >
-            Delete Location
-          </button>
+        >
+          Delete Location
+        </button>
 
           <button
             onClick={() => setModalOpen(true)}
@@ -196,7 +229,7 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
             <h2 className="text-xl font-semibold mb-4">Manage Images</h2>
 
-            {updatedData.Images.map((image, index) => (
+            {updatedData.images.map((image, index) => (
               <div key={index} className="flex items-center justify-between mb-2">
                 <p className="truncate w-3/4">{image}</p>
                 <button
@@ -208,21 +241,22 @@ const Location = ({ LocationData, DeleteLocation, onUpdateLocation , isModalForm
               </div>
             ))}
 
-            <div className="mt-4 flex">
+            <form className="mt-4 flex" >
               <input
-                type="text"
+                type="url"
                 value={newImageUrl}
                 onChange={(e) => setNewImageUrl(e.target.value)}
                 placeholder="Enter image URL"
                 className="border border-gray-300 rounded-lg p-2 w-full mr-2"
+              
               />
               <button
-                onClick={handleAddImage}
+                onClick={(e) => handleAddImage(e)}
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all duration-300"
               >
                 Add
               </button>
-            </div>
+            </form>
 
             <button
               onClick={handleCloseModal}
