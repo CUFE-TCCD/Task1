@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import withSidebar from "@/components/HOC/withSidebar";
+import { getUsers } from "../../../endpoints/userInfoEndpoints";
 
 const Users = () => {
-  // example for user data
-  const [users] = useState([
-    { id: 1, name: "John Doe", email: "john@example.com", accountType: "Admin", moreInfo: "more info about John." },
-    { id: 2, name: "Jane Smith", email: "jane@example.com", accountType: "User", moreInfo: "more info about Jane." },
-    { id: 3, name: "Karen Mike", email: "karen@example.com", accountType: "Moderator", moreInfo: "more info about Karen." },
-  ]);
+  const [users,setUsers] = useState([]);
 
+  useEffect(() => {
+    async function fetchData(){
+      try{
+        const response=await getUsers();
+        const Data = await response.json();
+        console.log(Data);
+        console.log(response);
+        setUsers(Data);
+      }catch(err){console.log(err)}
+    }
+    fetchData();
+  }, []);
   // State to manage the selected user and the modal visibility
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,12 +36,12 @@ const Users = () => {
   };
 
   // Function to filter users by account type
-  const handleFilterChange = (accountType) => {
-    setFilter(accountType);
+  const handleFilterChange = (role) => {
+    setFilter(role);
   };
 
   // Filtered users based on selected filter
-  const filteredUsers = users.filter((user) => (filter === "All" ? true : user.accountType === filter));
+  const filteredUsers = users.filter((user) => (filter === "All" ? true : user.role.toLowerCase() === filter.toLowerCase()));
  
   return (
     <div>
@@ -46,8 +54,8 @@ const Users = () => {
         <button onClick={() => handleFilterChange("Admin")} style={filter === "Admin" ? activeFilterStyle : filterButtonStyle}>
           Admins
         </button>
-        <button onClick={() => handleFilterChange("User")} style={filter === "User" ? activeFilterStyle : filterButtonStyle}>
-          Users
+        <button onClick={() => handleFilterChange("Member")} style={filter === "Member" ? activeFilterStyle : filterButtonStyle}>
+          Members
         </button>
         <button onClick={() => handleFilterChange("Moderator")} style={filter === "Moderator" ? activeFilterStyle : filterButtonStyle}>
           Moderators
@@ -64,10 +72,10 @@ const Users = () => {
         </thead>
         <tbody>
           {filteredUsers.map((user) => (
-            <tr key={user.id} onClick={() => handleUserClick(user)} style={rowStyle}>
-              <td style={cellStyle}>{user.name}</td>
+            <tr key={user.userId} onClick={() => handleUserClick(user)} style={rowStyle}>
+              <td style={cellStyle}>{user.firstName}</td>
               <td style={cellStyle}>{user.email}</td>
-              <td style={cellStyle}>{user.accountType}</td>
+              <td style={cellStyle}>{user.role}</td>
             </tr>
           ))}
         </tbody>
@@ -76,10 +84,10 @@ const Users = () => {
       {/* Modal */}
       {isModalOpen && selectedUser && (
         <div style={modalStyle}>
-          <h3>{selectedUser.name}'s Information</h3>
+          <h3>{selectedUser.firstName}'s Information</h3>
           <p><strong>Email:</strong> {selectedUser.email}</p>
-          <p><strong>Account Type:</strong> {selectedUser.accountType}</p>
-          <p><strong>More Info:</strong> {selectedUser.moreInfo}</p>
+          <p><strong>Account Type:</strong> {selectedUser.role}</p>
+          <p><strong>Last Name:</strong> {selectedUser.lastName}</p>
           <button onClick={closeModal} style={{ marginTop: "10px", padding: "8px 12px" }}>
             Close
           </button>

@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 
 const ModalForm = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
-    locationName: "",
+    name: "",
     address: "",
     capacity: "",
-    available: false,
-    Images: [],
-    googleMapsLink: ""
+    isAvailable: false,
+    images: [],
+    googleMapsLocation: ""
   });
 
   const modalRef = useRef(null);
@@ -23,12 +23,12 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
   const handleClose = () => {
     onClose();
     setFormData({
-      locationName: "",
+      name: "",
       address: "",
       capacity: "",
-      available: false,
-      Images: [],
-      googleMapsLink: ""
+      isAvailable: false,
+      images: [],
+      googleMapsLocation: ""
     });
   };
 
@@ -36,16 +36,16 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
     e.preventDefault();
     const newLocation = {
       ...formData,
-      Images: formData.Images.split(","), // Convert comma-separated URLs to array
+      images: formData.images.split(","), // Convert comma-separated URLs to array
     };
     onSubmit(newLocation);
     setFormData({
-      locationName: "",
+      name: "",
       address: "",
       capacity: "",
-      available: false,
-      Images: [],
-      googleMapsLink: ""
+      isAvailable: false,
+      images: [],
+      googleMapsLocation: ""
     });
   };
 
@@ -80,8 +80,8 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
             <label className="block text-gray-700">Location Name</label>
             <input
               type="text"
-              name="locationName"
-              value={formData.locationName}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
               required
@@ -111,22 +111,22 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Available</label>
+            <label className="block text-gray-700">isAvailable</label>
             <input
               type="checkbox"
-              name="available"
-              checked={formData.available}
+              name="isAvailable"
+              checked={formData.isAvailable}
               onChange={handleChange}
               className="mr-2"
             />
-            <span>{formData.available ? "Yes" : "No"}</span>
+            <span>{formData.isAvailable ? "Yes" : "No"}</span>
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Images (comma-separated URLs)</label>
+            <label className="block text-gray-700">images (comma-separated URLs)</label>
             <input
               type="text"
-              name="Images"
-              value={formData.Images}
+              name="images"
+              value={formData.images}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
               placeholder="https://image1.jpg,https://image2.jpg"
@@ -137,8 +137,8 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
             <label className="block text-gray-700">Google Maps Link</label>
             <input
               type="text"
-              name="googleMapsLink"
-              value={formData.googleMapsLink}
+              name="googleMapsLocation"
+              value={formData.googleMapsLocation}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
               required

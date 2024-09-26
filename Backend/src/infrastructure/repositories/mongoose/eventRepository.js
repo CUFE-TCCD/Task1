@@ -9,10 +9,8 @@ class EventRepository {
     return await EventModel.findById(id).exec();
   }
 
-  async getAll() {
-    return await EventModel.find().select(
-      "title description date location createdAt -_id"
-    );
+  async getAll(projection = undefined) {
+    return await EventModel.find().select(projection);
   }
 
   async update(id, updatedData) {
