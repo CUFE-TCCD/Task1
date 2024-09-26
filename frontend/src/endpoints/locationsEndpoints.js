@@ -1,16 +1,8 @@
-// write the logic of the  functions for fetching the Location endpoints
-const API_URL = "https://your-real-api-url.com/locations"; // Replace with your actual API URL
 
-// Function to retrieve the token (could be from localStorage or a state management solution)
 const getToken = () => {
-  // Example: If you store the token in localStorage
-  return localStorage.getItem('token'); // Replace with your token retrieval method
+  return localStorage.getItem('token'); 
 };
 
-// const authHeaders = () => ({
-//   Authorization: `Bearer ${getToken()}`,
-//   "Content-Type": "application/json",
-// });
 
 const getAllLocations = async () => {
   try {
@@ -77,8 +69,6 @@ const updateLocation = async (id, updatedLocation) => {
 
 const deleteLocation = async (id) => {
   try {
-    console.log(id)
-    console.log(1)
     const response = await fetch(`http://localhost:5300/api/v1/locations/${id}`, {
         method: 'DELETE',
         headers: {
@@ -86,16 +76,11 @@ const deleteLocation = async (id) => {
             Authorization: `Bearer ${getToken()}`,
         },
     });
-    console.log(2)
-    console.log(response)
     if (!response.ok) {
-        console.log(3)
         throw new Error('Error deleting location');
     }
-    console.log(4)
     return await response.json();
   } catch (error) {
-    console.log(error.message)
     console.error("Error deleting location:", error);
     throw error;
   }
