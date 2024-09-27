@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import withSidebar from "@/components/HOC/withSidebar";
-import { userCount } from "@/endpoints/statisticsEndpoints";
+import {
+  userCount,
+  feedbackCount,
+  eventsAttendance,
+} from "@/endpoints/statisticsEndpoints";
 import { Line, Bar, Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -82,7 +86,7 @@ const Statistics = () => {
     ],
   });
 
-  const [barData, setBarData] = useState({
+  const [eventAttendanceData, setEventAttendanceData] = useState({
     labels: ["Job Fair", "Research Day", "Orientation Day"],
     datasets: [
       {
@@ -94,13 +98,13 @@ const Statistics = () => {
     ],
   });
 
-  const [doughnutData, setDoughnutData] = useState({
-    labels: ["Positive", "Neutral", "Negative"],
+  const [feedbackData, setFeedbackData] = useState({
+    labels: ["Positive", "Negative"],
     datasets: [
       {
         label: "Feedback",
-        data: [60, 30, 10],
-        backgroundColor: ["#4CAF50", "#FFEB3B", "#F44336"],
+        data: [60, 10],
+        backgroundColor: ["#4CAF50", "#F44336"],
         hoverOffset: 4,
       },
     ],
@@ -126,7 +130,7 @@ const Statistics = () => {
         }
 
         const data = await res.json();
-        console.log("API Response:", data[0], data[1], data.members);
+        console.log("User count API Response:", data[0], data[1], data.members);
         setCurrentStatsData({
           labels: [data[0]._id, data[1]._id, "Users"],
           datasets: [
@@ -142,7 +146,61 @@ const Statistics = () => {
         console.error("Error fetching user count:", error);
       }
     }
+
+    async function fetchFeedback() {
+      console.log("Fetching feedback count");
+      try {
+        const res = await feedbackCount();
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        console.log("Feedback count API Response:", data);
+        setFeedbackData({
+          labels: ["Positive", "Negative"],
+          datasets: [
+            {
+              label: "Feedback",
+              data: [data.positive, data.negative],
+              backgroundColor: ["#4CAF50", "#F44336"],
+              hoverOffset: 4,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Error fetching feedback count:", error);
+      }
+    }
+    async function fetchEventAttendence() {
+      console.log("Fetching event attendance count");
+      try {
+        const res = await eventsAttendance();
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        console.log("Event Attendance countA PI Response:", data);
+        setEventAttendanceData({
+          labels: [data[0].title, data[1].title, "Orientation Day"],
+          datasets: [
+            {
+              label: "Event Attendance",
+              data: [data[0].capacity, data[1].capacity, 400],
+              backgroundColor: ["#cc3838", "#285D7C", "#f59e0b"],
+              borderWidth: 1,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Error fetching event attendance count:", error);
+      }
+    }
+
     fetchUserCount();
+    fetchFeedback();
+    fetchEventAttendence();
   }, []);
 
   return (
@@ -166,7 +224,7 @@ const Statistics = () => {
             Event Attendance Comparison
           </p>
           <div className="w-full lg:w-1/2 mx-auto">
-            <Bar data={barData} options={options} />
+            <Bar data={eventAttendanceData} options={options} />
           </div>
 
           {/* Feedback Overview */}
@@ -174,7 +232,7 @@ const Statistics = () => {
             Feedback Overview
           </p>
           <div className="w-full lg:w-1/2 mx-auto">
-            <Doughnut data={doughnutData} options={options} />
+            <Doughnut data={feedbackData} options={options} />
           </div>
 
           {/* Users over Time */}
