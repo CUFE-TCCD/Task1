@@ -28,6 +28,9 @@ class UserService {
   async deleteUser(id) {
     return await this.userRepository.delete(id);
   }
+  async getAllSponsors() {
+    return await this.userRepository.getAllSponsors();
+  }
 }
 
 module.exports = UserService;

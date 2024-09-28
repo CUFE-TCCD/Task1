@@ -26,8 +26,21 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["president", "head", "vice_head", "vice_president", "administration", "member"],
+      enum: [
+        "president",
+        "head",
+        "vice_head",
+        "vice_president",
+        "administration",
+        "member",
+      ],
       default: "member",
+    },
+    // indicator to indicate if the user is a sponsor
+    // true -> sponsor
+    sponsor: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
