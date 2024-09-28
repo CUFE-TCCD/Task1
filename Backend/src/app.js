@@ -5,6 +5,7 @@ const userRoutes = require("./interfaces/routes/userRoutes");
 const authRoutes = require("./interfaces/routes/authRoutes");
 const feedbackRoutes = require("./interfaces/routes/feedbackRoutes");
 const locationRoutes = require("./interfaces/routes/locationRoutes");
+const FAQRoutes = require("./interfaces/routes/FAQRoutes");
 const container = require("./container/servicesContainer");
 const globalErrorHandling = require("./interfaces/controllers/errorController");
 
@@ -28,6 +29,7 @@ app.use("/api/v1", locationRoutes);
 app.use("/api/v1", feedbackRoutes);
 //app.use("/api/v1", postRoutes);
 app.use("/api/v1", authRoutes);
+app.use("/api/v1", FAQRoutes);
 
 app.use(globalErrorHandling);
 module.exports = app;
