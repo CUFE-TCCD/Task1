@@ -3,7 +3,7 @@ const FAQController = require("../controllers/FAQController");
 
 const router = express.Router();
 
-router.get("/FAQs", FAQController.getAllFAQ).post("/FAQs", FAQController.addQA);
+router.route("/FAQs").get(FAQController.getAllFAQ).post(FAQController.addQA);
 
 router.patch("/FAQs/:id", FAQController.updateQA);
 
