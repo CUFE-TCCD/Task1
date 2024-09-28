@@ -12,3 +12,14 @@
 		letter-spacing: -0.5px;
 	}
 }
+
+
+.hover-facebook:hover {
+  color: #1877f2;
+}
+.hover-instagram:hover {
+  color: #c13584;
+}
+.hover-linkedin:hover {
+  color: #0077b5;
+}
