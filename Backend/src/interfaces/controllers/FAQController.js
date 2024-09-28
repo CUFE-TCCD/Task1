@@ -42,7 +42,7 @@ exports.getAllFAQ = async (req, res, next) => {
       req.requestScope
     );
     const FAQs = await FAQService.getAllFAQ();
-    res.status(200).json({ status: "success", FAQs });
+    res.status(200).json(FAQs);
   } catch (error) {
     next(error);
   }

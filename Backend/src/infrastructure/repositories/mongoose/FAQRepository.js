@@ -9,7 +9,7 @@ class FAQRepository {
     return await FAQModel.findByIdAndUpdate(id, { answer }, { new: true });
   }
   async getAll() {
-    return await FAQModel.find().select("-__v");
+    return await FAQModel.find().select("question answer -_id");
   }
 }
 
