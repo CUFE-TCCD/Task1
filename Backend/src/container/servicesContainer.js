@@ -15,6 +15,8 @@ const LocationRepository = require("../infrastructure/repositories/mongoose/loca
 const LocationService = require("../application/services/locationService");
 const ApplicationRepository = require("../infrastructure/repositories/mongoose/applicationRepository");
 const ApplicationService = require("../application/services/applicationService");
+const QuestionRepository = require("../infrastructure/repositories/mongoose/questionRepository");
+const QuestionService = require("../application/services/questionService");
 
 const container = new Container();
 
@@ -25,6 +27,7 @@ container.register('UserProfileRepository', UserProfileRepository, Lifetime.Scop
 container.register('FeedbackRepository', FeedbackRepository, Lifetime.Scoped);
 container.register('LocationRepository', LocationRepository, Lifetime.Scoped);
 container.register('ApplicationRepository', ApplicationRepository, Lifetime.Scoped);
+container.register("QuestionRepository", QuestionRepository, Lifetime.Scoped);
 
 container.register(
   'EventLocationService',
@@ -81,6 +84,10 @@ container.register(
   Lifetime.Scoped,
   ['ApplicationRepository']
 );
+
+container.register("QuestionService", QuestionService, Lifetime.Scoped, [
+  "QuestionRepository",
+]);
 
 
 module.exports = container;
