@@ -17,7 +17,9 @@ const getEventAttendance = async (req, res) => {
     const attendance = await EventService.getEventAttendance(eventId);
     res.status(200).json(attendance);
   } catch (error) {
-    res.status(500).json({ error: `Failed to get attendance for event ${eventId}` });
+    res
+      .status(500)
+      .json({ error: `Failed to get attendance for event ${eventId}` });
   }
 };
 
@@ -74,17 +76,21 @@ const deleteEvent = async (req, res, next) => {
       req.requestScope
     );
     await EventService.deleteEvent(eventId);
-    res.status(202).json({ success: true, message: "Event deleted successfully" });
+    res
+      .status(202)
+      .json({ success: true, message: "Event deleted successfully" });
   } catch (err) {
     next(err);
   }
-
 };
 
-  
 const getFinishedEvents = async (req, res) => {
   try {
-    const EventService = req.container.resolve("EventService", new Set(), req.requestScope);
+    const EventService = req.container.resolve(
+      "EventService",
+      new Set(),
+      req.requestScope
+    );
     const finishedEvents = await EventService.getSpecificFinishedEvents();
     res.status(200).json(finishedEvents);
   } catch (error) {
