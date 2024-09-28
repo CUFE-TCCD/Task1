@@ -14,6 +14,10 @@ class UserProfileService {
     return await this.userProfileRepository.getById(id);
   }
 
+  async getUserPic(userId) {
+    return await this.userProfileRepository.getUserPic(userId);
+  }
+
   async updateUserProfile(id, updatedProfileData) {
     const profile = await this.userProfileRepository.getById(id);
     if (!profile) {

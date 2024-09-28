@@ -8,6 +8,10 @@ class UserProfileRepository {
   async getById(id) {
     return await UserProfileModel.findById(id).exec();
   }
+  
+  async getUserPic(userId) {
+    return await UserProfileModel.findOne({ userId }).select("picture").exec();
+  }
 
   async getAll() {
     return await UserProfileModel.find().exec();

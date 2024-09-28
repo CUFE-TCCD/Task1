@@ -7,6 +7,10 @@ class UserService {
     return await this.userRepository.getById(id);
   }
 
+  async getUserInfo(id) {
+    return await this.userRepository.getUserInfo(id);
+  }
+
   async getAllUsers() {
     return await this.userRepository.getAll();
   }

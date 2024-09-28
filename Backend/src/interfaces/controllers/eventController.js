@@ -32,6 +32,11 @@ const getEventAttendance = async (req, res) => {
   }
 };
 
+const applyToEvent = async (req, res) => {
+  
+
+}
+
 const createEvent = async (req, res, next) => {
   try {
     const EventService = req.container.resolve(
@@ -112,4 +117,5 @@ module.exports = {
   updateEvent,
   deleteEvent,
   getFinishedEvents,
+  applyToEvent
 };

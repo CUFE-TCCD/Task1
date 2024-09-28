@@ -9,6 +9,10 @@ class UserRepository {
     return await UserModel.findById(id).exec();
   }
 
+  async getUserInfo(id) {
+    return await UserModel.findById(id).select("-password").exec();
+  }
+  
   async getAll() {
     return await UserModel.find().exec();
   }
