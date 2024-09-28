@@ -33,12 +33,12 @@ class AuthService {
     const firstName = firstname;
     const lastName = lastname;
     const userDetailsDTO = { email, password, firstName, lastName };
-    const newUser = {
+    let newUser = {
       _id: generateUUID(),
       ...userDetailsDTO,
       password: await hashPassword(password),
     };
-    await this.userRepository.create(newUser);
+    newUser = await this.userRepository.create(newUser);
 
     return generateToken(newUser);
   }
