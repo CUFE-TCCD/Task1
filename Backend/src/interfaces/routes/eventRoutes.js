@@ -25,6 +25,10 @@ router.post(
   eventController.createEvent
 );
 
+router.get("/events/registrations", authMiddleware, eventController.getEventRegistrations);
+router.get("/events/:eventId/attendance", authMiddleware, eventController.getEventAttendance);
+router.post("/event", authMiddleware,titleValidation, eventController.createEvent);
+
 router.get("/events", eventController.getAllEvents);
 
 router.put(

@@ -1,5 +1,5 @@
-const Container = require('./container');
-const Lifetime = require('./lifetimes');
+const Container = require("./container");
+const Lifetime = require("./lifetimes");
 const EventLocationRepository = require("../infrastructure/repositories/mongoose/eventLocationRepository");
 const EventLocationService = require("../application/services/eventLocationService");
 const EventRepository = require("../infrastructure/repositories/mongoose/eventRepository");
@@ -15,6 +15,10 @@ const LocationRepository = require("../infrastructure/repositories/mongoose/loca
 const LocationService = require("../application/services/locationService");
 const ApplicationRepository = require("../infrastructure/repositories/mongoose/applicationRepository");
 const ApplicationService = require("../application/services/applicationService");
+const FAQRepository = require("../infrastructure/repositories/mongoose/FAQRepository");
+const FAQService = require("../application/services/FAQService");
+const QuestionRepository = require("../infrastructure/repositories/mongoose/questionRepository");
+const QuestionService = require("../application/services/questionService");
 
 const container = new Container();
 
@@ -25,62 +29,74 @@ container.register('UserProfileRepository', UserProfileRepository, Lifetime.Scop
 container.register('FeedbackRepository', FeedbackRepository, Lifetime.Scoped);
 container.register('LocationRepository', LocationRepository, Lifetime.Scoped);
 container.register('ApplicationRepository', ApplicationRepository, Lifetime.Scoped);
+container.register("QuestionRepository", QuestionRepository, Lifetime.Scoped);
 
 container.register(
-  'EventLocationService',
+  "EventLocationService",
   EventLocationService,
   Lifetime.Scoped,
-  ['EventLocationRepository']
+  ["EventLocationRepository"]
+);
+container.register("EventRepository", EventRepository, Lifetime.Scoped);
+container.register("UserRepository", UserRepository, Lifetime.Scoped);
+container.register(
+  "UserProfileRepository",
+  UserProfileRepository,
+  Lifetime.Scoped
+);
+container.register("FeedbackRepository", FeedbackRepository, Lifetime.Scoped);
+container.register("LocationRepository", LocationRepository, Lifetime.Scoped);
+container.register(
+  "ApplicationRepository",
+  ApplicationRepository,
+  Lifetime.Scoped
 );
 
-container.register(
-  'EventService',
-  EventService,
-  Lifetime.Scoped,
-  ['EventRepository', 'ApplicationRepository']
-);
+container.register("FAQRepository", FAQRepository, Lifetime.Scoped);
 
 container.register(
-  'UserService',
-  UserService,
+  "EventLocationService",
+  EventLocationService,
   Lifetime.Scoped,
-  ['UserRepository']
+  ["EventLocationRepository"]
 );
 
-container.register(
-  'UserProfileService',
-  UserProfileService,
-  Lifetime.Scoped,
-  ['UserProfileRepository']
-);
+container.register("EventService", EventService, Lifetime.Scoped, [
+  "EventRepository",
+  "ApplicationRepository",
+]);
 
-container.register(
-  'FeedbackService',
-  FeedbackService,
-  Lifetime.Scoped,
-  ['FeedbackRepository']
-);
+container.register("UserService", UserService, Lifetime.Scoped, [
+  "UserRepository",
+]);
 
-container.register(
-  'AuthService',
-  AuthService,
-  Lifetime.Scoped,
-  ['UserRepository']
-);
+container.register("UserProfileService", UserProfileService, Lifetime.Scoped, [
+  "UserProfileRepository",
+]);
 
-container.register(
-  'LocationService',
-  LocationService,
-  Lifetime.Scoped,
-  ['LocationRepository']
-);
+container.register("FeedbackService", FeedbackService, Lifetime.Scoped, [
+  "FeedbackRepository",
+]);
 
-container.register(
-  'ApplicationService',
-  ApplicationService,
-  Lifetime.Scoped,
-  ['ApplicationRepository']
-);
+container.register("AuthService", AuthService, Lifetime.Scoped, [
+  "UserRepository",
+]);
+
+container.register("LocationService", LocationService, Lifetime.Scoped, [
+  "LocationRepository",
+]);
+
+container.register("ApplicationService", ApplicationService, Lifetime.Scoped, [
+  "ApplicationRepository",
+]);
+
+container.register("FAQService", FAQService, Lifetime.Scoped, [
+  "FAQRepository",
+]);
+
+container.register("QuestionService", QuestionService, Lifetime.Scoped, [
+  "QuestionRepository",
+]);
 
 
 module.exports = container;
