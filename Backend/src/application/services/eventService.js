@@ -62,8 +62,8 @@ class EventService {
     return await this.applicationRepository.getAll();
   }
   
-  async getEventAttendance() {
-    return await this.applicationRepository.getByEventId();
+  async getEventAttendance(eventId) {
+    return await this.applicationRepository.getByEventId(eventId);
   }
 
   async getSpecificFinishedEvents() {

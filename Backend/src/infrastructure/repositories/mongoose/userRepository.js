@@ -14,7 +14,7 @@ class UserRepository {
   }
   
   async getCountByRole() {
-    return await UserModel.aggregate([
+    const roleCounts = await UserModel.aggregate([
       {
         $group: {
           _id: '$role',        // Group by the 'role' field
@@ -22,6 +22,16 @@ class UserRepository {
         }
       }
     ]).exec();
+  
+    // Initialize an empty counts object
+    const counts = {};
+  
+    // Populate the counts object based on the aggregated result
+    roleCounts.forEach(role => {
+      counts[role._id] = role.count;
+    });
+  
+    return counts;
   }
 
   async getByEmail(email) {

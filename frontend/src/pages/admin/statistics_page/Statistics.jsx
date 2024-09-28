@@ -130,13 +130,15 @@ const Statistics = () => {
         }
 
         const data = await res.json();
-        console.log("User count API Response:", data[0], data[1], data.members);
+        console.log("User count API Response:", data);
+        const labels = Object.keys(data);
+        const counts = Object.values(data);
         setCurrentStatsData({
-          labels: [data[0]._id, data[1]._id, "Users"],
+          labels: labels,
           datasets: [
             {
               label: "Count",
-              data: [data[0].count, data[1].count, 0],
+              data: counts,
               backgroundColor: ["#4CAF50", "#cc3838", "#f59e0b"],
               borderWidth: 1,
             },
@@ -154,15 +156,16 @@ const Statistics = () => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
-
         const data = await res.json();
         console.log("Feedback count API Response:", data);
+        const labels = Object.keys(data);
+        const counts = Object.values(data);
         setFeedbackData({
-          labels: ["Positive", "Negative"],
+          labels: labels,
           datasets: [
             {
               label: "Feedback",
-              data: [data.positive, data.negative],
+              data: counts,
               backgroundColor: ["#4CAF50", "#F44336"],
               hoverOffset: 4,
             },
@@ -182,12 +185,16 @@ const Statistics = () => {
 
         const data = await res.json();
         console.log("Event Attendance countA PI Response:", data);
+
+        const labels = data.map((event) => event.title);
+        const attendanceData = data.map((event) => event.capacity);
+
         setEventAttendanceData({
-          labels: [data[0].title, data[1].title, "Orientation Day"],
+          labels: labels,
           datasets: [
             {
               label: "Event Attendance",
-              data: [data[0].capacity, data[1].capacity, 400],
+              data: attendanceData,
               backgroundColor: ["#cc3838", "#285D7C", "#f59e0b"],
               borderWidth: 1,
             },
@@ -245,21 +252,17 @@ const Statistics = () => {
 
           {/* Current Statistics */}
           <p className="font-semibold text-2xl mb-3 border-b border-black mt-8">
-            Current Number of Users, Professors, and Admins
+            Current Number of Users, Heads, and Admins
           </p>
           <div className="text-center flex justify-around font-bold text-xl">
-            <div>
-              <p>{currentStatsData.labels[0]}</p>
-              <p className="text-3xl">{currentStatsData.datasets[0].data[0]}</p>
-            </div>
-            <div>
-              <p>{currentStatsData.labels[1]}</p>
-              <p className="text-3xl">{currentStatsData.datasets[0].data[1]}</p>
-            </div>
-            <div>
-              <p>{currentStatsData.labels[2]}</p>
-              <p className="text-3xl">{currentStatsData.datasets[0].data[2]}</p>
-            </div>
+            {currentStatsData.labels.map((label, index) => (
+              <div key={index}>
+                <p>{label}</p>
+                <p className="text-3xl">
+                  {currentStatsData.datasets[0].data[index]}
+                </p>
+              </div>
+            ))}
           </div>
           <div className="w-full lg:w-1/2 mx-auto mt-4">
             <Bar data={currentStatsData} options={options} />
