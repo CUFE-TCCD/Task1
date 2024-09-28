@@ -15,6 +15,9 @@ const LocationRepository = require("../infrastructure/repositories/mongoose/loca
 const LocationService = require("../application/services/locationService");
 const ApplicationRepository = require("../infrastructure/repositories/mongoose/applicationRepository");
 const ApplicationService = require("../application/services/applicationService");
+const EventBookmarkRepository = require("../infrastructure/repositories/mongoose/eventBookmarkRepository");
+const EventBookmarkService = require("../application/services/eventBookmarkService");
+
 
 const container = new Container();
 
@@ -25,6 +28,8 @@ container.register('UserProfileRepository', UserProfileRepository, Lifetime.Scop
 container.register('FeedbackRepository', FeedbackRepository, Lifetime.Scoped);
 container.register('LocationRepository', LocationRepository, Lifetime.Scoped);
 container.register('ApplicationRepository', ApplicationRepository, Lifetime.Scoped);
+container.register('EventBookmarkRepository', EventBookmarkRepository, Lifetime.Scoped);
+
 
 container.register(
   'EventLocationService',
@@ -80,6 +85,13 @@ container.register(
   ApplicationService,
   Lifetime.Scoped,
   ['ApplicationRepository']
+);
+
+container.register(
+  'EventBookmarkService',
+  EventBookmarkService,
+  Lifetime.Scoped,
+  ['EventBookmarkRepository']
 );
 
 

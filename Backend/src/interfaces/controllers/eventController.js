@@ -16,14 +16,13 @@ const getEventAttendance = async (req, res) => {
     const UserService = req.container.resolve('UserService', new Set(), req.requestScope);
 
     const attendances = await EventService.getEventAttendance(eventId);
-    
+
     let response = [];
 
-    for(attendance in attendances)
-    {
+    for (attendance in attendances) {
       let userId = attendances[attendance].userId;
       let user = await UserService.getUserById(userId);
-      response.push({name: user.firstName + " " + user.lastName, status: attendances[attendance].attended ? "attended" : "absent"});
+      response.push({ name: user.firstName + " " + user.lastName, status: attendances[attendance].attended ? "attended" : "absent" });
     }
 
     res.status(200).json(response);
@@ -92,7 +91,7 @@ const deleteEvent = async (req, res, next) => {
 
 };
 
-  
+
 const getFinishedEvents = async (req, res) => {
   try {
     const EventService = req.container.resolve("EventService", new Set(), req.requestScope);
@@ -104,6 +103,30 @@ const getFinishedEvents = async (req, res) => {
   }
 };
 
+const bookmarkEvent = async (req, res) => {
+  const { eventId } = req.params;
+  try {
+    const EventBookmarkService = req.container.resolve("EventBookmarkService", new Set(), req.requestScope);
+    const bookmark = await EventBookmarkService.addBookmark(eventId, req.user.id);
+    res.status(200).json(bookmark);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed adding to bookmark" });
+  }
+};
+
+const removeBookmark = async (req, res) => {
+  const { eventId } = req.params;
+  try {
+    const EventBookmarkService = req.container.resolve("EventBookmarkService", new Set(), req.requestScope);
+    const bookmark = await EventBookmarkService.removeBookmark(eventId, req.user.id);
+    res.status(200).json(bookmark);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed remove from bookmark" });
+  }
+};
+
 module.exports = {
   getEventRegistrations,
   getEventAttendance,
@@ -112,4 +135,6 @@ module.exports = {
   updateEvent,
   deleteEvent,
   getFinishedEvents,
+  bookmarkEvent,
+  removeBookmark
 };
