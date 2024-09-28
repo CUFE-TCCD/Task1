@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const eventRoutes = require("./interfaces/routes/eventRoutes");
 const userRoutes = require("./interfaces/routes/userRoutes");
+const adminRoutes = require("./interfaces/routes/adminRoutes");
 const authRoutes = require("./interfaces/routes/authRoutes");
 const feedbackRoutes = require("./interfaces/routes/feedbackRoutes");
 const locationRoutes = require("./interfaces/routes/locationRoutes");
@@ -28,6 +29,8 @@ app.use("/api/v1", locationRoutes);
 app.use("/api/v1", feedbackRoutes);
 //app.use("/api/v1", postRoutes);
 app.use("/api/v1", authRoutes);
+app.use("/api/v1", adminRoutes);
+
 
 app.use(globalErrorHandling);
 module.exports = app;

@@ -11,6 +11,10 @@ class UserService {
     return await this.userRepository.getUserInfo(id);
   }
 
+  async changeRole(email, role) {
+    return await this.userRepository.changeRole(email, role);
+  }
+
   async getAllUsers() {
     return await this.userRepository.getAll();
   }

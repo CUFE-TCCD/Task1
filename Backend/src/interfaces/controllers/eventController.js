@@ -33,8 +33,30 @@ const getEventAttendance = async (req, res) => {
 };
 
 const applyToEvent = async (req, res) => {
+  const { eventId } = req.params;
+  const userId = req.user.id;
   
-
+  try {
+    const ApplicationService = req.container.resolve('ApplicationService', new Set(), req.requestScope);
+    const EventService = req.container.resolve('EventService', new Set(), req.requestScope);
+    const appData = {userId:userId, eventId: eventId};
+    const event =  await EventService.getEventById(eventId);
+    if(!event)
+    {
+      res.status(404).json({error:"Event not found"});
+      return;
+    }
+    const exist = await ApplicationService.checkApplicationExist(userId,eventId);
+    if(exist)
+    {
+      res.status(409).json({error:"User already applied"});
+      return;
+    }
+    const application = await ApplicationService.createApplication(appData);
+    res.status(200).json(application);
+  } catch (error) {
+    res.status(500).json({ error: `Failed to apply` });
+  }
 }
 
 const createEvent = async (req, res, next) => {

@@ -1,3 +1,4 @@
+const { changeRole } = require("../../../interfaces/controllers/userController");
 const UserModel = require("../../database/mongoose/models/UserSchema");
 
 class UserRepository {
@@ -17,6 +18,10 @@ class UserRepository {
     return await UserModel.find().exec();
   }
   
+  async changeRole(email, role) {
+    return await UserModel.findOneAndUpdate({email}, {$set:{role:role}});
+  }
+
   async getCountByRole() {
     const roleCounts = await UserModel.aggregate([
       {
