@@ -1,9 +1,11 @@
 const { generateToken, hashPassword, comparePassword, validateEmail, generateResetToken, sendResetTokenEmail, validateResetToken } = require("../utils/authUtils");
+const EmailService = require("../utils/email");
 const { generateUUID } = require("../utils/generateId");
 
 class AuthService {
   constructor(userRepository) {
     this.userRepository = userRepository;
+    this.emailService = new EmailService();
   }
 
   async signup(userDetails) {
@@ -39,6 +41,16 @@ class AuthService {
       password: await hashPassword(password),
     };
     await this.userRepository.create(newUser);
+
+    this.emailService.sendSignupEmail(
+      email, firstName
+    ).then(res => {
+      console.log("Sent sucessfully")
+      console.log(res);
+    }).catch(err => {
+      console.log("Error sending an email")
+      console.log(err)
+    });
 
     return generateToken(newUser);
   }
