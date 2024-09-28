@@ -24,6 +24,12 @@ class EventBookmarkService {
 
         return { "bookmark": false };
     }
+
+    async getBookmarkedEvents(userId) {
+        const events = await this.eventBookmarkRepository.getEventsByUserId(userId);
+
+        return { events };
+    }
 }
 
 module.exports = EventBookmarkService;

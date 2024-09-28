@@ -127,6 +127,17 @@ const removeBookmark = async (req, res) => {
   }
 };
 
+const getBookmarkedEvents = async (req, res) => {
+  try {
+    const EventBookmarkService = req.container.resolve("EventBookmarkService", new Set(), req.requestScope);
+    const events = await EventBookmarkService.getBookmarkedEvents(req.user.id);
+    res.status(200).json(events);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed getting bookmarks" });
+  }
+};
+
 module.exports = {
   getEventRegistrations,
   getEventAttendance,
@@ -136,5 +147,6 @@ module.exports = {
   deleteEvent,
   getFinishedEvents,
   bookmarkEvent,
-  removeBookmark
+  removeBookmark,
+  getBookmarkedEvents
 };

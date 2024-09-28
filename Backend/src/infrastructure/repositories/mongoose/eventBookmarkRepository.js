@@ -1,4 +1,5 @@
 const EventBookmarkModel = require("../../database/mongoose/models/EventBookmarkSchema");
+const EventModel = require("../../database/mongoose/models/EventSchema")
 
 class EventBookmarkRepository {
     async create(eventBookmark) {
@@ -17,8 +18,13 @@ class EventBookmarkRepository {
         return await EventBookmarkModel.find({ eventId: eventId }).exec();
     }
 
-    async getByUserId(userId) {
-        return await EventBookmarkModel.find({ userId: userId }).exec();
+    async getEventsByUserId(userId) {
+        const bookmarks = await EventBookmarkModel.find({ userId: userId });
+        const events = await Promise.all(
+            bookmarks.map(async bookmark => await EventModel.findById(bookmark.eventId))
+        )
+
+        return events;
     }
 
     async getAll() {

@@ -12,6 +12,7 @@ router.put("/events/:eventId", authMiddleware, titleValidation, eventController.
 router.delete("/events/:eventId", authMiddleware, eventController.deleteEvent);
 router.get('/events/finished', eventController.getFinishedEvents);
 router.post('/events/:eventId/bookmark', authMiddleware, eventController.bookmarkEvent);
-router.post('/events/:eventId/remove-bookmark', authMiddleware, eventController.removeBookmark);
+router.post('/events/:eventId/remove-bookmark', authMiddleware, eventController.removeBookmark)
+router.get('/events/bookmarks', authMiddleware, eventController.getBookmarkedEvents);
 
 module.exports = router;
