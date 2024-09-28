@@ -5,8 +5,8 @@ class FAQRepository {
     return await FAQModel.create(question);
   }
 
-  async updateAnswer(id, answer) {
-    return await FAQModel.findByIdAndUpdate(id, { answer }, { new: true });
+  async updateAnswer(id, QA) {
+    return await FAQModel.findByIdAndUpdate(id, QA, { new: true });
   }
   async getAll() {
     return await FAQModel.find().select("question answer -_id");

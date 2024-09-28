@@ -1,21 +1,22 @@
-exports.addQuestion = async (req, res, next) => {
+exports.addQA = async (req, res, next) => {
   try {
     const FAQService = req.container.resolve(
       "FAQService",
       new Set(),
       req.requestScope
     );
-    const faq = await FAQService.createQuestion(req.body);
+    const QA = await FAQService.createQA(req.body);
+
     res.status(201).json({
       status: "success",
-      data: faq,
+      data: QA,
     });
   } catch (error) {
     next(error);
   }
 };
 
-exports.updateAnswer = async (req, res, next) => {
+exports.updateQA = async (req, res, next) => {
   try {
     const FAQService = req.container.resolve(
       "FAQService",
@@ -24,9 +25,7 @@ exports.updateAnswer = async (req, res, next) => {
     );
 
     const { id } = req.params;
-    const { answer } = req.body;
-
-    const faq = await FAQService.updateAnswer(id, answer);
+    const faq = await FAQService.updateQA(id, req.body);
 
     res.status(200).json({ status: "success", data: faq });
   } catch (error) {

@@ -6,19 +6,23 @@ class FAQService {
     this.FAQRepository = FAQRepository;
   }
 
-  async createQuestion(questionData) {
+  async createQA(QA) {
     questionData.id = uuidv4();
 
-    const { id, userId, question } = questionData;
+    const { id, userId, question, answer } = QA;
 
-    const newFAQ = new FAQ(id, userId, question);
+    const newFAQ = new FAQ(id, userId, question, answer);
     const FAQDocument = newFAQ.toDatabaseFormat();
 
     return await this.FAQRepository.createQuestion(FAQDocument);
   }
 
-  async updateAnswer(questionId, answer) {
-    return await this.FAQRepository.updateAnswer(questionId, answer);
+  async updateQA(questionId, QA) {
+    const { id, userId, question, answer } = QA;
+    const newFAQ = new FAQ(id, userId, question, answer);
+    const FAQDocument = newFAQ.toDatabaseFormat();
+
+    return await this.FAQRepository.updateAnswer(questionId, FAQDocument);
   }
 
   async getAllFAQ() {
