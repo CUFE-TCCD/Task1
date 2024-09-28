@@ -1,7 +1,6 @@
 import { MdEventNote } from "react-icons/md";
-import { FaUsers } from "react-icons/fa";
+import { FaUsers, FaFacebook, FaLinkedin, FaInstagram } from "react-icons/fa";
 import { CiLocationOn, CiLogout } from "react-icons/ci";
-
 import { FaChartSimple } from "react-icons/fa6";
 
 export const sideLinks = [
@@ -14,4 +13,41 @@ export const sideLinks = [
   { name: "Locations", icon: CiLocationOn, path: "/admin/locations" },
   { name: "Events", icon: MdEventNote, path: "/admin/events" },
   { name: "Log out", icon: CiLogout, path: "/sign-in" },
+];
+
+export const navLinks = [
+  {
+    name: "Home",
+    path: "/",
+  },
+  {
+    name: "Events",
+    path: "/events",
+  },
+  {
+    name: "FAQs",
+    path: "/faqs",
+  },
+  {
+    name: "Sponsors",
+    path: "/sponsors",
+  },
+];
+
+export const socialLinks = [
+  {
+    logo: FaFacebook,
+    path: "#",
+    className: "hover-facebook",
+  },
+  {
+    logo: FaLinkedin,
+    path: "#",
+    className: "hover-linkedin",
+  },
+  {
+    logo: FaInstagram,
+    path: "#",
+    className: "hover-instagram",
+  },
 ];
