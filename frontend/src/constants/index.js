@@ -32,6 +32,10 @@ export const navLinks = [
     name: "Sponsors",
     path: "/sponsors",
   },
+  {
+    name: "Contact Us",
+    path: "/contact-us",
+  },
 ];
 
 export const socialLinks = [

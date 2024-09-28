@@ -9,6 +9,7 @@ import Profile from "./profile/Profile";
 import Events from "./events/Events";
 import FAQs from "./faqs/FAQs";
 import Sponsors from "./sponsors/Sponsors";
+import ContactUs from "./contact-us/ContactUs";
 export {
   Event,
   Statistics,
@@ -21,4 +22,5 @@ export {
   Events,
   FAQs,
   Sponsors,
+  ContactUs
 };
