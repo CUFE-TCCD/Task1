@@ -38,7 +38,7 @@ class UserRepository {
     return await UserModel.findByIdAndDelete(id).exec();
   }
   async getAllSponsors() {
-    return await UserModel.find({ sponsor: true }).exec();
+    return await UserModel.find({ role: "sponsor" }).exec();
   }
 }
 

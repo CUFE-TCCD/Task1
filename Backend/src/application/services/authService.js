@@ -13,13 +13,23 @@ const defaultPicture =
   "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
 
 class AuthService {
-  constructor(userRepository) {
+  constructor(userRepository, userProfileRepository) {
     this.userRepository = userRepository;
+    this.userProfileRepository = userProfileRepository;
   }
 
   async signup(userDetails) {
-    console.log("signup", userDetails);
-    const { email, password, firstName, lastName, sponsor } = userDetails;
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      role,
+      cv,
+      linkedinProfile,
+      gradDate,
+      picture,
+    } = userDetails;
 
     // Check that fields are not empty
     if (!email || !password || !firstName || !lastName) {
@@ -45,28 +55,26 @@ class AuthService {
       throw new Error("User already exists");
     }
 
-    const userDetailsDTO = { email, password, firstName, lastName };
+    if (!role) role = "member";
+    const userDetailsDTO = { email, password, firstName, lastName, role };
     const newUser = {
       _id: generateUUID(),
       ...userDetailsDTO,
       password: await hashPassword(password),
-      sponsor: sponsor,
+    };
+    const userProfile = {
+      _id: generateUUID(),
+      userId: newUser._id,
+      picture: picture || defaultPicture,
+      cv: cv || "",
+      linkedinProfile: linkedinProfile || "",
+      gradDate: gradDate || "",
     };
     await this.userRepository.create(newUser);
-
+    console.log(this.userRepository, this.userProfileRepository);
+    await this.userProfileRepository.create(userProfile);
     return generateToken(newUser);
   }
-
-  // async createProfile(profileDetails) {
-  //   const newProfile = {
-  //     _id: generateUUID(),
-  //     ...profileDetails,
-  //   };
-  //   if (!newProfile.picture) {
-  //     newProfile.picture = defaultPicture;
-  //   }
-  //   return await this.userRepository.create(newProfile);
-  // }
 
   async login(email, password) {
     // Validate Email address
@@ -83,8 +91,8 @@ class AuthService {
       throw new Error("Invalid password");
     }
     const token = generateToken(user);
-    const sponsor = user.sponsor;
-    return { token, sponsor };
+    const role = user.role;
+    return { token, role };
   }
 
   async changePassword(userId, password, newPassword) {

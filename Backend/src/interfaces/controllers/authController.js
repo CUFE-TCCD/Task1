@@ -1,17 +1,11 @@
 const container = require("../../container/servicesContainer");
 const AuthService = container.resolve("AuthService");
-
+const userProfileService = container.resolve("UserProfileService");
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const { token, sponsor } = await AuthService.login(email, password);
-    res.status(200).json({
-      token,
-      redirectedUrl:
-        sponsor === true
-          ? `${req.originalUrl}/sponsors`
-          : `${req.originalUrl}/students`,
-    });
+    const { token, role } = await AuthService.login(email, password);
+    res.status(200).json({ token, role });
   } catch (error) {
     console.log(error);
     res.status(401).json({ error: "Invalid email / password" });
@@ -19,19 +13,32 @@ const login = async (req, res) => {
 };
 
 const signup = async (req, res) => {
-  const { firstName, lastName, email, password, sponsor } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    role,
+    cv,
+    linkedinProfile,
+    picture,
+    gradDate,
+  } = req.body;
+  const userDetails = {
+    firstName,
+    lastName,
+    email,
+    password,
+    role,
+    cv,
+    linkedinProfile,
+    picture,
+    gradDate,
+  };
   try {
-    const token = await AuthService.signup({
-      firstName,
-      lastName,
-      email,
-      password,
-      sponsor,
-    });
+    const token = await AuthService.signup(userDetails);
 
-    res
-      .status(201)
-      .json({ token, redirectedUrl: `${req.originalUrl}/profile` });
+    res.status(201).json({ token, role });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Failed to register user" });
@@ -42,7 +49,12 @@ const createProfile = async (req, res) => {
   const { userId, cv, picture, gradDate, linkedinProfile } = req.body;
   const profileDetails = { userId, cv, picture, gradDate, linkedinProfile };
   try {
-    const newProfile = await AuthService.createProfile(profileDetails);
+    console.log(AuthService, userProfileService);
+    const newProfile = await userProfileService.createUserProfile(
+      profileDetails
+    );
+
+    res.status(201).send("profile created successfully");
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Failed to create profile" });

@@ -14,7 +14,9 @@ class UserProfileRepository {
   }
 
   async update(id, updatedData) {
-    return await UserProfileModel.findByIdAndUpdate(id, updatedData, { new: true }).exec();
+    return await UserProfileModel.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    }).exec();
   }
 
   async delete(id) {

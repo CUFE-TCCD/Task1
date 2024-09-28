@@ -33,14 +33,9 @@ const UserSchema = new Schema(
         "vice_president",
         "administration",
         "member",
+        "sponsor",
       ],
       default: "member",
-    },
-    // indicator to indicate if the user is a sponsor
-    // true -> sponsor
-    sponsor: {
-      type: Boolean,
-      default: false,
     },
   },
   { timestamps: true }

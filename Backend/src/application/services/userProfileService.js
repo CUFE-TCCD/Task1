@@ -1,11 +1,26 @@
+const { generateUUID } = require("../utils/generateId");
+
+const defaultPicture =
+  "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
+
 class UserProfileService {
   constructor(userProfileRepository) {
     this.userProfileRepository = userProfileRepository;
   }
 
   async createUserProfile(userProfileData) {
-    const { id, userId, cv, gradDate, linkedinProfile, picture } = userProfileData;
-    const userProfile = new UserProfile(id, userId, cv, gradDate, linkedinProfile, picture);
+    const { userId, cv, gradDate, linkedinProfile, picture } = userProfileData;
+    let _id = generateUUID();
+    const userProfile = {
+      _id,
+      userId,
+      cv,
+      gradDate,
+      linkedinProfile,
+      picture,
+    };
+
+    if (!userProfile.picture) userProfile.picture = defaultPicture;
 
     return await this.userProfileRepository.create(userProfile);
   }
