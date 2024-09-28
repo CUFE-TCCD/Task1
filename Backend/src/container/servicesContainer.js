@@ -1,5 +1,5 @@
-const Container = require('./container');
-const Lifetime = require('./lifetimes');
+const Container = require("./container");
+const Lifetime = require("./lifetimes");
 const EventLocationRepository = require("../infrastructure/repositories/mongoose/eventLocationRepository");
 const EventLocationService = require("../application/services/eventLocationService");
 const EventRepository = require("../infrastructure/repositories/mongoose/eventRepository");
@@ -15,72 +15,72 @@ const LocationRepository = require("../infrastructure/repositories/mongoose/loca
 const LocationService = require("../application/services/locationService");
 const ApplicationRepository = require("../infrastructure/repositories/mongoose/applicationRepository");
 const ApplicationService = require("../application/services/applicationService");
+const FAQRepository = require("../infrastructure/repositories/mongoose/FAQRepository");
+const FAQService = require("../application/services/FAQService");
 
 const container = new Container();
 
-container.register('EventLocationRepository', EventLocationRepository, Lifetime.Scoped);
-container.register('EventRepository', EventRepository, Lifetime.Scoped);
-container.register('UserRepository', UserRepository, Lifetime.Scoped);
-container.register('UserProfileRepository', UserProfileRepository, Lifetime.Scoped);
-container.register('FeedbackRepository', FeedbackRepository, Lifetime.Scoped);
-container.register('LocationRepository', LocationRepository, Lifetime.Scoped);
-container.register('ApplicationRepository', ApplicationRepository, Lifetime.Scoped);
-
 container.register(
-  'EventLocationService',
+  "EventLocationService",
   EventLocationService,
   Lifetime.Scoped,
-  ['EventLocationRepository']
+  ["EventLocationRepository"]
 );
+container.register("EventRepository", EventRepository, Lifetime.Scoped);
+container.register("UserRepository", UserRepository, Lifetime.Scoped);
+container.register(
+  "UserProfileRepository",
+  UserProfileRepository,
+  Lifetime.Scoped
+);
+container.register("FeedbackRepository", FeedbackRepository, Lifetime.Scoped);
+container.register("LocationRepository", LocationRepository, Lifetime.Scoped);
+container.register(
+  "ApplicationRepository",
+  ApplicationRepository,
+  Lifetime.Scoped
+);
+
+container.register("FAQRepository", FAQRepository, Lifetime.Scoped);
 
 container.register(
-  'EventService',
-  EventService,
+  "EventLocationService",
+  EventLocationService,
   Lifetime.Scoped,
-  ['EventRepository', 'ApplicationRepository']
+  ["EventLocationRepository"]
 );
 
-container.register(
-  'UserService',
-  UserService,
-  Lifetime.Scoped,
-  ['UserRepository']
-);
+container.register("EventService", EventService, Lifetime.Scoped, [
+  "EventRepository",
+  "ApplicationRepository",
+]);
 
-container.register(
-  'UserProfileService',
-  UserProfileService,
-  Lifetime.Scoped,
-  ['UserProfileRepository']
-);
+container.register("UserService", UserService, Lifetime.Scoped, [
+  "UserRepository",
+]);
 
-container.register(
-  'FeedbackService',
-  FeedbackService,
-  Lifetime.Scoped,
-  ['FeedbackRepository']
-);
+container.register("UserProfileService", UserProfileService, Lifetime.Scoped, [
+  "UserProfileRepository",
+]);
 
-container.register(
-  'AuthService',
-  AuthService,
-  Lifetime.Scoped,
-  ['UserRepository']
-);
+container.register("FeedbackService", FeedbackService, Lifetime.Scoped, [
+  "FeedbackRepository",
+]);
 
-container.register(
-  'LocationService',
-  LocationService,
-  Lifetime.Scoped,
-  ['LocationRepository']
-);
+container.register("AuthService", AuthService, Lifetime.Scoped, [
+  "UserRepository",
+]);
 
-container.register(
-  'ApplicationService',
-  ApplicationService,
-  Lifetime.Scoped,
-  ['ApplicationRepository']
-);
+container.register("LocationService", LocationService, Lifetime.Scoped, [
+  "LocationRepository",
+]);
 
+container.register("ApplicationService", ApplicationService, Lifetime.Scoped, [
+  "ApplicationRepository",
+]);
+
+container.register("FAQService", FAQService, Lifetime.Scoped, [
+  "FAQRepository",
+]);
 
 module.exports = container;
