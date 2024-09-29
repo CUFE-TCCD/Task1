@@ -5,6 +5,7 @@ exports.addQA = async (req, res, next) => {
       new Set(),
       req.requestScope
     );
+    
     const QA = await FAQService.createQA(req.body);
 
     res.status(201).json({

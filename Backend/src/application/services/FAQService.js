@@ -7,22 +7,32 @@ class FAQService {
   }
 
   async createQA(QA) {
-    questionData.id = uuidv4();
+    QA.id = uuidv4();
 
-    const { id, userId, question, answer } = QA;
+    const { id, question, answer } = QA;
 
-    const newFAQ = new FAQ(id, userId, question, answer);
+    const newFAQ = new FAQ(id, question, answer);
     const FAQDocument = newFAQ.toDatabaseFormat();
 
     return await this.FAQRepository.createQuestion(FAQDocument);
   }
 
   async updateQA(questionId, QA) {
-    const { id, userId, question, answer } = QA;
-    const newFAQ = new FAQ(id, userId, question, answer);
-    const FAQDocument = newFAQ.toDatabaseFormat();
+    const { id, question, answer } = QA;
+    const newFAQ = new FAQ(id, question, answer);
 
-    return await this.FAQRepository.updateAnswer(questionId, FAQDocument);
+    const FAQDocument = newFAQ.toDatabaseFormat();
+    const newQA = await this.FAQRepository.updateAnswer(
+      questionId,
+      FAQDocument
+    );
+
+    if (!newQA) {
+      const error = new Error("There is no QA with that id");
+      error.statusCode = 404;
+      throw error;
+    }
+    return newQA;
   }
 
   async getAllFAQ() {

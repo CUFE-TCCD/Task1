@@ -6,11 +6,6 @@ const FAQSchema = new Schema({
     type: String, // UUID
     required: true,
   },
-  userId: {
-    type: String, // UUID
-    ref: "User",
-    required: true,
-  },
   question: {
     type: String,
     required: [true, "The Question field is required"],
