@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DeleteEventConfirmPopup from "./deleteEventConfirmPopup";
 import PropTypes from 'prop-types';
 import fakeEventImage from '@/assets/tccdbackground.jpeg';
+
 export default function EventPoster({ eventData, triggerEdit, triggerDetails }) {
     const [fadeIn, setFadeIn] = useState('opacity-0 -translate-x-1/2');
     const [deleteEvent, setDeleteEvent] = useState(false);
@@ -34,16 +35,16 @@ export default function EventPoster({ eventData, triggerEdit, triggerDetails }) 
                         <span className="break-words whitespace-pre-wrap max-w-[88%]">{eventData.description}</span>
                     </div>
                     <div className="gap-5 flex mt-4">
-                        <button onClick={() => triggerDetails(eventData)} className="font-semibold px-4 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">More Details</button>
+                        <button className="font-semibold px-4 py-1 rounded-lg bg-[#3d3d3d] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">More Details</button>
                         <button onClick={() => triggerEdit(eventData)} className="font-semibold px-4 py-1 rounded-lg bg-[#285D7C] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Edit</button>
                         <button onClick={() => setDeleteEvent(true)} className="font-semibold px-4 py-1 rounded-lg bg-[#cc3838] hover:bg-white text-white hover:text-black hover:border-black border-transparent border transition-colors duration-200 ease-in-out">Delete</button>
                     </div>
                 </div>
             </div>
             <div className="relative group sm:hidden w-full min-h-[180px] z-10">
-                <img className="absolute top-0 h-full w-full object-fit z-0 rounded-lg" src={null} alt="event" />
+                <img className="absolute top-0 h-full w-full object-fit z-0 rounded-lg" src={fakeEventImage} alt="event" />
                 <div className="absolute w-full bottom-0 bg-black bg-opacity-55 h-1/3 group-hover:h-full z-10 transition-all duration-300 ease-in-out rounded-b-lg group-hover:rounded-lg" />
-                <div className="w-full h-full p-3 z-20 absolute top-0 translate-y-2/3 group-hover:translate-y-0 text-white transition-all duration-300 ease-in-out">
+                <div className="w-full h-fit p-3 z-20 absolute top-0 translate-y-[200%] group-hover:translate-y-0 text-white transition-all duration-300 ease-in-out">
                     <p className="text-sm">{eventData.title}</p>
                     <p className="text-xs">{formattedDate}</p>
                     <p className="text-xs mt-2 group-hover:block hidden">Description: {eventData.description}</p>

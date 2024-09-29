@@ -11,3 +11,13 @@
     background-color: #285D7C;
     border-radius: 10px;
 }
+
+.description-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 88%;
+}
