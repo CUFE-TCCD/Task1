@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import withNavbar from '../../components/HOC/withNavbar';
-
+import EventPoster from './ProfileEventPoster';
 const Profile = () => {
-  // User data coming from an API or state
+  // Temporary user data
   const [user, setUser] = useState({
     name: "John Doe",
-    title: "Company", // Can be "Regular", "Professor", or "Company"
+    title: "Regular", // Can be "Regular", "Professor", or "Company"
     Email: "Johndoe@test.com",
     photo: "https://i.ibb.co/9Gb3dY0/18b9ffb2a8a791d50213a9d595c4dd52.jpg", // initially empty, default photo will be used
-    events: ["Event 1", "Event 2", "Event 3"], // Events for regular users or professors
+    bookmarkedEvents: [1],
+    events: [{
+      id: 1,
+      title: 'Job Fair',
+      date: '2023-09-20',
+      description: 'A large event with several companies recruiting new employees.',
+  },
+  {
+      id: 2,
+      title: 'Research Day',
+      date: '2023-09-21',
+      description: 'Presentations and papers from various fields.',
+  }], // Events for regular users or professors
     locations: ["Location A", "Location B"], // Locations for companies
   });
   const isEvents = user.title === "Regular" || user.title === "Professor";
@@ -38,19 +50,35 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Events */}
+      
       <div className="mt-10">
       <h3 className="text-2xl font-bold mb-4">{isEvents ? "EVENTS" : "LOCATIONS"}</h3>
         <div className="bg-gray-50 p-6 rounded-lg shadow-md">
-          {/* <h4 className="text-xl font-semibold mb-3">idk</h4> */}
-          <ul className="list-disc ml-6 space-y-2">
-            {isEvents ? (
-              user.events.map((event, index) => (
-                <li key={index} className="text-gray-700">{event}</li>
-              ))
-            ) : (
+          <ul>
+            {isEvents ? ( //Events
+              <>
+              <div className="flex flex-col sm:gap-0 px-3 border-l-2 border-[#a79d9d] gap-4 h-full w-full select-none">
+            <h4 className="text-xl font-semibold mb-3">Registered</h4>
+            {user.events.filter(event => !user.bookmarkedEvents.includes(event.id)).map((event) => (
+              <EventPoster
+                key={event.id}
+                eventData={event}
+              />
+            ))}
+          </div>
+              <div className="flex flex-col sm:gap-0 px-3 border-l-2 border-[#a79d9d] gap-4 h-full w-full select-none">
+            <h4 className="text-xl font-semibold mb-3">Bookmarked</h4>
+            {user.events.filter(event => user.bookmarkedEvents.includes(event.id)).map((event) => (
+              <EventPoster
+                key={event.id}
+                eventData={event}
+              />
+            ))}
+          </div>
+          </>
+            ) : ( // Locations
               user.locations.map((location, index) => (
-                <li key={index} className="text-gray-700">{location}</li>
+                <li key={index} className="text-gray-700">{location}</li> 
               ))
             )}
           </ul>
@@ -61,3 +89,4 @@ const Profile = () => {
 };
 
 export default withNavbar(Profile);
+

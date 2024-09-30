@@ -10,8 +10,6 @@ const Users = () => {
       try{
         const response=await getUsers();
         const Data = await response.json();
-        console.log(Data);
-        console.log(response);
         setUsers(Data);
       }catch(err){console.log(err)}
     }
