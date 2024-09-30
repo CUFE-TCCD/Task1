@@ -1,11 +1,9 @@
 class Application {
-  constructor(id, userId, eventId, status = "pending", qrCodeUrl, appliedAt) {
-    this.id = id;
+  constructor(id, userId, eventId, qrCodeUrl) {
+    this._id = id;
     this.userId = userId;
     this.eventId = eventId;
-    this.status = status;
     this.qrCodeUrl = qrCodeUrl;
-    this.appliedAt = appliedAt;
   }
 
   approve() {
