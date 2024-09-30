@@ -11,6 +11,7 @@ router.get("/events", eventController.getAllEvents);
 router.put("/events/:eventId", authMiddleware,titleValidation, eventController.updateEvent);
 router.delete("/events/:eventId", authMiddleware, eventController.deleteEvent);
 router.get('/events/finished', eventController.getFinishedEvents);
+router.post('/events/:eventId/apply', authMiddleware, eventController.applyToEvent);
 
 
 module.exports = router;

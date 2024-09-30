@@ -2,10 +2,9 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
+const isAdmin = require("../middlewares/isAdmin");
 
-router.get("/users/count", authMiddleware, userController.getUsersCountByRole);
-router.get("/users", authMiddleware, userController.getAllUsers);
-router.get("/users/:id", authMiddleware, userController.getUser);
+router.put("/admin/members", authMiddleware, isAdmin, userController.changeRole);
 
 
 module.exports = router;
