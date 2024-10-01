@@ -19,5 +19,6 @@ router.get(
 );
 
 router.get("/users/:id", authMiddleware, userController.getUser);
+router.get("/sponsors", authMiddleware, userController.getAllSponsors);
 
 module.exports = router;

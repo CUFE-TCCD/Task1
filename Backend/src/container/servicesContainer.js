@@ -24,14 +24,6 @@ const QuestionRepository = require("../infrastructure/repositories/mongoose/ques
 const QuestionService = require("../application/services/questionService");
 
 const container = new Container();
-
-container.register('EventLocationRepository', EventLocationRepository, Lifetime.Scoped);
-container.register('EventRepository', EventRepository, Lifetime.Scoped);
-container.register('UserRepository', UserRepository, Lifetime.Scoped);
-container.register('UserProfileRepository', UserProfileRepository, Lifetime.Scoped);
-container.register('FeedbackRepository', FeedbackRepository, Lifetime.Scoped);
-container.register('LocationRepository', LocationRepository, Lifetime.Scoped);
-container.register('ApplicationRepository', ApplicationRepository, Lifetime.Scoped);
 container.register('EventBookmarkRepository', EventBookmarkRepository, Lifetime.Scoped);
 
 container.register("QuestionRepository", QuestionRepository, Lifetime.Scoped);
@@ -51,7 +43,16 @@ container.register(
 );
 container.register("FeedbackRepository", FeedbackRepository, Lifetime.Scoped);
 container.register("LocationRepository", LocationRepository, Lifetime.Scoped);
+  "UserProfileRepository",
+  UserProfileRepository,
+  Lifetime.Scoped
+);
+container.register("FeedbackRepository", FeedbackRepository, Lifetime.Scoped);
+container.register("LocationRepository", LocationRepository, Lifetime.Scoped);
 container.register(
+  "ApplicationRepository",
+  ApplicationRepository,
+  Lifetime.Scoped
   "ApplicationRepository",
   ApplicationRepository,
   Lifetime.Scoped
@@ -103,12 +104,8 @@ container.register("QuestionService", QuestionService, Lifetime.Scoped, [
   "QuestionRepository",
 ]);
 
-container.register(
-  'EventBookmarkService',
-  EventBookmarkService,
-  Lifetime.Scoped,
-  ['EventBookmarkRepository']
-);
-
+container.register("EventBookmarkService", EventBookmarkService, Lifetime.Scoped, [
+  "EventBookmarkRepository",
+]);
 
 module.exports = container;
