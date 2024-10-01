@@ -26,23 +26,12 @@ router.get(
 );
 
 router.get("/events", eventController.getAllEvents);
+router.put("/events/:eventId", authMiddleware,titleValidation, eventController.updateEvent);
+router.delete("/events/:eventId", authMiddleware, eventController.deleteEvent);
+router.get('/events/finished', eventController.getFinishedEvents);
 
-router
-  .route("/events/:eventId")
-  .put(
-    authMiddleware,
-    roleValidation("president", "head", "vice_head", "vice_president", "admin"),
-    titleValidation,
-    eventController.updateEvent
-  )
-  .delete(
-    authMiddleware,
-    roleValidation("president", "head", "vice_head", "vice_president", "admin"),
-    eventController.deleteEvent
-  );
 
-router.get("/events/finished", eventController.getFinishedEvents);
-
-router.post('/events/:eventId/apply', authMiddleware, eventController.applyToEvent);
-
+router.post('/events/:eventId/bookmark', authMiddleware, eventController.bookmarkEvent);
+router.post('/events/:eventId/remove-bookmark', authMiddleware, eventController.removeBookmark)
+router.get('/events/bookmarks', authMiddleware, eventController.getBookmarkedEvents);
 module.exports = router;
