@@ -16,19 +16,20 @@ const getEventAttendance = async (req, res) => {
     const UserService = req.container.resolve('UserService', new Set(), req.requestScope);
 
     const attendances = await EventService.getEventAttendance(eventId);
-    
+
     let response = [];
 
-    for(attendance in attendances)
-    {
+    for (attendance in attendances) {
       let userId = attendances[attendance].userId;
       let user = await UserService.getUserById(userId);
-      response.push({name: user.firstName + " " + user.lastName, status: attendances[attendance].attended ? "attended" : "absent"});
+      response.push({ name: user.firstName + " " + user.lastName, status: attendances[attendance].attended ? "attended" : "absent" });
     }
 
     res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({ error: `Failed to get attendance for event ${eventId}` });
+    res
+      .status(500)
+      .json({ error: `Failed to get attendance for event ${eventId}` });
   }
 };
 
@@ -112,22 +113,61 @@ const deleteEvent = async (req, res, next) => {
       req.requestScope
     );
     await EventService.deleteEvent(eventId);
-    res.status(202).json({ success: true, message: "Event deleted successfully" });
+    res
+      .status(202)
+      .json({ success: true, message: "Event deleted successfully" });
   } catch (err) {
     next(err);
   }
-
 };
 
-  
 const getFinishedEvents = async (req, res) => {
   try {
-    const EventService = req.container.resolve("EventService", new Set(), req.requestScope);
+    const EventService = req.container.resolve(
+      "EventService",
+      new Set(),
+      req.requestScope
+    );
     const finishedEvents = await EventService.getSpecificFinishedEvents();
     res.status(200).json(finishedEvents);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to get finished events" });
+  }
+};
+
+const bookmarkEvent = async (req, res) => {
+  const { eventId } = req.params;
+  try {
+    const EventBookmarkService = req.container.resolve("EventBookmarkService", new Set(), req.requestScope);
+    const bookmark = await EventBookmarkService.addBookmark(eventId, req.user.id);
+    res.status(200).json(bookmark);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed adding to bookmark" });
+  }
+};
+
+const removeBookmark = async (req, res) => {
+  const { eventId } = req.params;
+  try {
+    const EventBookmarkService = req.container.resolve("EventBookmarkService", new Set(), req.requestScope);
+    const bookmark = await EventBookmarkService.removeBookmark(eventId, req.user.id);
+    res.status(200).json(bookmark);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed remove from bookmark" });
+  }
+};
+
+const getBookmarkedEvents = async (req, res) => {
+  try {
+    const EventBookmarkService = req.container.resolve("EventBookmarkService", new Set(), req.requestScope);
+    const events = await EventBookmarkService.getBookmarkedEvents(req.user.id);
+    res.status(200).json(events);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed getting bookmarks" });
   }
 };
 
@@ -139,5 +179,8 @@ module.exports = {
   updateEvent,
   deleteEvent,
   getFinishedEvents,
-  applyToEvent
+  applyToEvent,
+  bookmarkEvent,
+  removeBookmark,
+  getBookmarkedEvents
 };
