@@ -1,8 +1,6 @@
-const container = require("../../container/container");
-const EventService = container.eventService;
-
 const getEventRegistrations = async (req, res) => {
   try {
+    const EventService = req.container.resolve('EventService', new Set(), req.requestScope);
     const registrations = await EventService.getEventRegistrations();
     res.status(200).json(registrations);
   } catch (error) {
@@ -14,12 +12,52 @@ const getEventRegistrations = async (req, res) => {
 const getEventAttendance = async (req, res) => {
   const { eventId } = req.params;
   try {
-    const attendance = await EventService.getEventAttendance(eventId);
-    res.status(200).json(attendance);
+    const EventService = req.container.resolve('EventService', new Set(), req.requestScope);
+    const UserService = req.container.resolve('UserService', new Set(), req.requestScope);
+
+    const attendances = await EventService.getEventAttendance(eventId);
+    
+    let response = [];
+
+    for(attendance in attendances)
+    {
+      let userId = attendances[attendance].userId;
+      let user = await UserService.getUserById(userId);
+      response.push({name: user.firstName + " " + user.lastName, status: attendances[attendance].attended ? "attended" : "absent"});
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ error: `Failed to get attendance for event ${eventId}` });
   }
 };
+
+const applyToEvent = async (req, res) => {
+  const { eventId } = req.params;
+  const userId = req.user.id;
+  
+  try {
+    const ApplicationService = req.container.resolve('ApplicationService', new Set(), req.requestScope);
+    const EventService = req.container.resolve('EventService', new Set(), req.requestScope);
+    const appData = {userId:userId, eventId: eventId};
+    const event =  await EventService.getEventById(eventId);
+    if(!event)
+    {
+      res.status(404).json({error:"Event not found"});
+      return;
+    }
+    const exist = await ApplicationService.checkApplicationExist(userId,eventId);
+    if(exist)
+    {
+      res.status(409).json({error:"User already applied"});
+      return;
+    }
+    const application = await ApplicationService.createApplication(appData);
+    res.status(200).json(application);
+  } catch (error) {
+    res.status(500).json({ error: `Failed to apply` });
+  }
+}
 
 const createEvent = async (req, res, next) => {
   try {
@@ -101,4 +139,5 @@ module.exports = {
   updateEvent,
   deleteEvent,
   getFinishedEvents,
+  applyToEvent
 };

@@ -4,7 +4,13 @@ const FeedbackService = container.resolve('FeedbackService');
 const getAllFeedbacks = async (req, res) => {
   try {
     const FeedbackService = req.container.resolve('FeedbackService', new Set(), req.requestScope);
-    const feedbacks = await FeedbackService.getAllFeedbacks();
+    const feedbacksDB = await FeedbackService.getAllFeedbacks();
+    let feedbacks = [];
+    for(let feedback in feedbacksDB)
+    {
+      obj = {feedback: feedbacksDB[feedback].feedback, status: feedbacksDB[feedback].type};
+      feedbacks.push(obj);
+    }
     res.status(200).json(feedbacks);
   } catch (error) {
     res.status(500).json({ error: "Failed to get feedbacks" });

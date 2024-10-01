@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import withSidebar from "@/components/HOC/withSidebar";
-import { userCount } from "@/endpoints/statisticsEndpoints";
+import {
+  userCount,
+  feedbackCount,
+  eventsAttendance,
+} from "@/endpoints/statisticsEndpoints";
 import { Line, Bar, Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -82,7 +86,7 @@ const Statistics = () => {
     ],
   });
 
-  const [barData, setBarData] = useState({
+  const [eventAttendanceData, setEventAttendanceData] = useState({
     labels: ["Job Fair", "Research Day", "Orientation Day"],
     datasets: [
       {
@@ -94,13 +98,13 @@ const Statistics = () => {
     ],
   });
 
-  const [doughnutData, setDoughnutData] = useState({
-    labels: ["Positive", "Neutral", "Negative"],
+  const [feedbackData, setFeedbackData] = useState({
+    labels: ["Positive", "Negative"],
     datasets: [
       {
         label: "Feedback",
-        data: [60, 30, 10],
-        backgroundColor: ["#4CAF50", "#FFEB3B", "#F44336"],
+        data: [60, 10],
+        backgroundColor: ["#4CAF50", "#F44336"],
         hoverOffset: 4,
       },
     ],
@@ -126,13 +130,15 @@ const Statistics = () => {
         }
 
         const data = await res.json();
-        console.log("API Response:", data[0], data[1], data.members);
+        console.log("User count API Response:", data);
+        const labels = Object.keys(data);
+        const counts = Object.values(data);
         setCurrentStatsData({
-          labels: [data[0]._id, data[1]._id, "Users"],
+          labels: labels,
           datasets: [
             {
               label: "Count",
-              data: [data[0].count, data[1].count, 0],
+              data: counts,
               backgroundColor: ["#4CAF50", "#cc3838", "#f59e0b"],
               borderWidth: 1,
             },
@@ -142,7 +148,66 @@ const Statistics = () => {
         console.error("Error fetching user count:", error);
       }
     }
+
+    async function fetchFeedback() {
+      console.log("Fetching feedback count");
+      try {
+        const res = await feedbackCount();
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const data = await res.json();
+        console.log("Feedback count API Response:", data);
+        const labels = Object.keys(data);
+        const counts = Object.values(data);
+        setFeedbackData({
+          labels: labels,
+          datasets: [
+            {
+              label: "Feedback",
+              data: counts,
+              backgroundColor: ["#4CAF50", "#F44336"],
+              hoverOffset: 4,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Error fetching feedback count:", error);
+      }
+    }
+    async function fetchEventAttendence() {
+      console.log("Fetching event attendance count");
+      try {
+        const res = await eventsAttendance();
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        console.log("Event Attendance countA PI Response:", data);
+
+        const labels = data.map((event) => event.title);
+        const attendanceData = data.map((event) => event.capacity);
+
+        setEventAttendanceData({
+          labels: labels,
+          datasets: [
+            {
+              label: "Event Attendance",
+              data: attendanceData,
+              backgroundColor: ["#cc3838", "#285D7C", "#f59e0b"],
+              borderWidth: 1,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Error fetching event attendance count:", error);
+      }
+    }
+
     fetchUserCount();
+    fetchFeedback();
+    fetchEventAttendence();
   }, []);
 
   return (
@@ -166,7 +231,7 @@ const Statistics = () => {
             Event Attendance Comparison
           </p>
           <div className="w-full lg:w-1/2 mx-auto">
-            <Bar data={barData} options={options} />
+            <Bar data={eventAttendanceData} options={options} />
           </div>
 
           {/* Feedback Overview */}
@@ -174,7 +239,7 @@ const Statistics = () => {
             Feedback Overview
           </p>
           <div className="w-full lg:w-1/2 mx-auto">
-            <Doughnut data={doughnutData} options={options} />
+            <Doughnut data={feedbackData} options={options} />
           </div>
 
           {/* Users over Time */}
@@ -187,21 +252,17 @@ const Statistics = () => {
 
           {/* Current Statistics */}
           <p className="font-semibold text-2xl mb-3 border-b border-black mt-8">
-            Current Number of Users, Professors, and Admins
+            Current Number of Users, Heads, and Admins
           </p>
           <div className="text-center flex justify-around font-bold text-xl">
-            <div>
-              <p>{currentStatsData.labels[0]}</p>
-              <p className="text-3xl">{currentStatsData.datasets[0].data[0]}</p>
-            </div>
-            <div>
-              <p>{currentStatsData.labels[1]}</p>
-              <p className="text-3xl">{currentStatsData.datasets[0].data[1]}</p>
-            </div>
-            <div>
-              <p>{currentStatsData.labels[2]}</p>
-              <p className="text-3xl">{currentStatsData.datasets[0].data[2]}</p>
-            </div>
+            {currentStatsData.labels.map((label, index) => (
+              <div key={index}>
+                <p>{label}</p>
+                <p className="text-3xl">
+                  {currentStatsData.datasets[0].data[index]}
+                </p>
+              </div>
+            ))}
           </div>
           <div className="w-full lg:w-1/2 mx-auto mt-4">
             <Bar data={currentStatsData} options={options} />
