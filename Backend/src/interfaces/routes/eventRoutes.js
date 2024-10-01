@@ -3,15 +3,46 @@ const router = express.Router();
 const eventController = require("../controllers/eventController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const titleValidation = require("../middlewares/eventTitleValidation");
+const roleValidation = require("../middlewares/roleValidation");
 
-router.get("/events/registrations", authMiddleware, eventController.getEventRegistrations);
-router.get("/events/:eventId/attendance", authMiddleware, eventController.getEventAttendance);
-router.post("/event", authMiddleware,titleValidation, eventController.createEvent);
+router.post(
+  "/event",
+  authMiddleware,
+  roleValidation("president", "head", "vice_head", "vice_president", "admin"),
+  titleValidation,
+  eventController.createEvent
+);
+
+router.get(
+  "/events/registrations",
+  authMiddleware,
+  eventController.getEventRegistrations
+);
+
+router.get(
+  "/events/:eventId/attendance",
+  authMiddleware,
+  eventController.getEventAttendance
+);
+
 router.get("/events", eventController.getAllEvents);
-router.put("/events/:eventId", authMiddleware,titleValidation, eventController.updateEvent);
-router.delete("/events/:eventId", authMiddleware, eventController.deleteEvent);
-router.get('/events/finished', eventController.getFinishedEvents);
-router.post('/events/:eventId/apply', authMiddleware, eventController.applyToEvent);
 
+router
+  .route("/events/:eventId")
+  .put(
+    authMiddleware,
+    roleValidation("president", "head", "vice_head", "vice_president", "admin"),
+    titleValidation,
+    eventController.updateEvent
+  )
+  .delete(
+    authMiddleware,
+    roleValidation("president", "head", "vice_head", "vice_president", "admin"),
+    eventController.deleteEvent
+  );
+
+router.get("/events/finished", eventController.getFinishedEvents);
+
+router.post('/events/:eventId/apply', authMiddleware, eventController.applyToEvent);
 
 module.exports = router;

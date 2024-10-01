@@ -6,6 +6,8 @@ const adminRoutes = require("./interfaces/routes/adminRoutes");
 const authRoutes = require("./interfaces/routes/authRoutes");
 const feedbackRoutes = require("./interfaces/routes/feedbackRoutes");
 const locationRoutes = require("./interfaces/routes/locationRoutes");
+const FAQRoutes = require("./interfaces/routes/FAQRoutes");
+const contactUsRoutes = require("./interfaces/routes/contactUsRoutes");
 const container = require("./container/servicesContainer");
 const globalErrorHandling = require("./interfaces/controllers/errorController");
 
@@ -31,6 +33,7 @@ app.use("/api/v1", feedbackRoutes);
 app.use("/api/v1", authRoutes);
 app.use("/api/v1", adminRoutes);
 
-
+app.use("/api/v1", FAQRoutes);
+app.use("/api/v1", contactUsRoutes);
 app.use(globalErrorHandling);
 module.exports = app;
