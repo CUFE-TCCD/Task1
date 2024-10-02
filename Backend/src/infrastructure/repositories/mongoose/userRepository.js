@@ -1,3 +1,4 @@
+const { changeRole } = require("../../../interfaces/controllers/userController");
 const UserModel = require("../../database/mongoose/models/UserSchema");
 
 class UserRepository {
@@ -9,18 +10,26 @@ class UserRepository {
     return await UserModel.findById(id).exec();
   }
 
+  async getUserInfo(id) {
+    return await UserModel.findById(id).select("-password").exec();
+  }
+  
   async getAll() {
     return await UserModel.find().exec();
   }
   
+  async changeRole(email, role) {
+    return await UserModel.findOneAndUpdate({email}, {$set:{role:role}});
+  }
+
   async getCountByRole() {
     const roleCounts = await UserModel.aggregate([
       {
         $group: {
-          _id: '$role',        // Group by the 'role' field
-          count: { $sum: 1 }   // Count the number of documents in each group
-        }
-      }
+          _id: "$role", // Group by the 'role' field
+          count: { $sum: 1 }, // Count the number of documents in each group
+        },
+      },
     ]).exec();
   
     // Initialize an empty counts object
@@ -39,11 +48,16 @@ class UserRepository {
   }
 
   async update(id, updatedData) {
-    return await UserModel.findByIdAndUpdate(id, updatedData, { new: true }).exec();
+    return await UserModel.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    }).exec();
   }
 
   async delete(id) {
     return await UserModel.findByIdAndDelete(id).exec();
+  }
+  async getAllSponsors() {
+    return await UserModel.find({ role: "sponsor" }).exec();
   }
 }
 

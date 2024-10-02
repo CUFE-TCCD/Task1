@@ -1,13 +1,20 @@
+const { generateUUID } = require("../utils/generateId");
+const Application = require("../../domain/models/Application");
+
 class ApplicationService {
   constructor(applicationRepository) {
     this.applicationRepository = applicationRepository;
   }
 
   async createApplication(applicationData) {
-    const { id, userId, eventId, status, qrCodeUrl } = applicationData;
-    const application = new Application(id, userId, eventId, status, qrCodeUrl);
-
+    const { userId, eventId, qrCodeUrl = "QR" } = applicationData;
+    const id = generateUUID();
+    const application = new Application(id, userId, eventId, qrCodeUrl);
     return await this.applicationRepository.create(application);
+  }
+
+  async checkApplicationExist(userId, eventId) {
+    return await this.applicationRepository.getByUserEvent(userId, eventId);
   }
 
   async getApplicationById(id) {

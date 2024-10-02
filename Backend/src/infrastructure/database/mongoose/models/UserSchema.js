@@ -26,7 +26,15 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["president", "head", "vice_head", "vice_president", "administration", "member"],
+      enum: [
+        "president",
+        "head",
+        "vice_head",
+        "vice_president",
+        "administration",
+        "member",
+        "sponsor",
+      ],
       default: "member",
     },
   },

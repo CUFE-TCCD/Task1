@@ -8,13 +8,19 @@ class UserProfileRepository {
   async getById(id) {
     return await UserProfileModel.findById(id).exec();
   }
+  
+  async getUserPic(userId) {
+    return await UserProfileModel.findOne({ userId }).select("picture").exec();
+  }
 
   async getAll() {
     return await UserProfileModel.find().exec();
   }
 
   async update(id, updatedData) {
-    return await UserProfileModel.findByIdAndUpdate(id, updatedData, { new: true }).exec();
+    return await UserProfileModel.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    }).exec();
   }
 
   async delete(id) {
