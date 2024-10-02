@@ -36,27 +36,13 @@ container.register(
 );
 container.register("EventRepository", EventRepository, Lifetime.Scoped);
 container.register("UserRepository", UserRepository, Lifetime.Scoped);
-container.register(
-  "UserProfileRepository",
-  UserProfileRepository,
-  Lifetime.Scoped
-);
+container.register("UserProfileRepository",UserProfileRepository,Lifetime.Scoped);
 container.register("FeedbackRepository", FeedbackRepository, Lifetime.Scoped);
 container.register("LocationRepository", LocationRepository, Lifetime.Scoped);
-  "UserProfileRepository",
-  UserProfileRepository,
-  Lifetime.Scoped
-);
+
 container.register("FeedbackRepository", FeedbackRepository, Lifetime.Scoped);
 container.register("LocationRepository", LocationRepository, Lifetime.Scoped);
-container.register(
-  "ApplicationRepository",
-  ApplicationRepository,
-  Lifetime.Scoped
-  "ApplicationRepository",
-  ApplicationRepository,
-  Lifetime.Scoped
-);
+container.register("ApplicationRepository",ApplicationRepository,Lifetime.Scoped);
 
 container.register("FAQRepository", FAQRepository, Lifetime.Scoped);
 
