@@ -1,154 +1,57 @@
 import withNavbar from '../../components/HOC/withNavbar'
 import EventPoster from './components/eventPoster'
 import '@/styles/eventPage.css'
-
+import { fetchEvents, fetchBookmarkedEvents } from '../../endpoints/mainEventsEndpoints';
 
 import { PiHeartBreak } from "react-icons/pi";
 import { FaChevronUp } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const Events = () => {
-  const eventssample = [
-    {
-      title: 'Event 1',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 1',
-      location: 'Sample Location 1',
-      saved: true,
-      finished: false
-    },
-    {
-      title: 'Event 2',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 2',
-      location: 'Sample Location 2',
-      saved: true,
-      finished: false
-    },
-    {
-      title: 'Event 3',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 3',
-      location: 'Sample Location 3',
-      saved: true,
-      finished: false
-    },
-    {
-      title: 'Event 4',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 4',
-      location: 'Sample Location 4',
-      saved: true,
-      finished: false
-    },
-    {
-      title: 'Event 5',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 5',
-      location: 'Sample Location 5',
-      saved: true,
-      finished: false
-    },
-    {
-      title: 'Event 6',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 6',
-      location: 'Sample Location 6',
-      saved: true,
-      finished: false
-    },
-    {
-      title: 'Event 7',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 7',
-      location: 'Sample Location 7',
-      saved: true,
-      finished: false
-    },
-    {
-      title: 'Event 8',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 8',
-      location: 'Sample Location 8',
-      saved: true,
-      finished: false
-    },
-    {
-      title: 'Event 9',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 9',
-      location: 'Sample Location 9',
-      saved: true,
-      finished: false
-    },
-    {
-      title: 'Event 10',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 10',
-      location: 'Sample Location 10',
-      saved: true,
-      finished: false
-    }
-  ]
-
-  const sampleOldEvents = [
-    {
-      title: 'Event 1',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 1',
-      location: 'Sample Location 1',
-      saved: true,
-      finished: true
-    },
-    {
-      title: 'Event 2',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 2',
-      location: 'Sample Location 2',
-      saved: true,
-      finished: true
-    },
-    {
-      title: 'Event 3',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 3',
-      location: 'Sample Location 3',
-      saved: true,
-      finished: true
-    },
-    {
-      title: 'Event 4',
-      date: '2022-12-12',
-      description: 'This is a sample event description for event 4',
-      location: 'Sample Location 4',
-      saved: true,
-      finished: true
-    }
-  ];
 
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [listUpcomingNum, setListUpcomingNum] = useState(0);
   const [listPastNum, setListPastNum] = useState(0);
+  const eventRefs = useRef([]);
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    setUpcomingEvents(eventssample);
-    setPastEvents(sampleOldEvents);
-    setLoading(false);
-
+    fetchEvents().then((events) => {
+      if(!events) return;
+      fetchBookmarkedEvents().then((bookmarkedEvents) => {
+        const eventsBookmarked = events.map((event) => {if(bookmarkedEvents.includes(event._id)) return {...event, saved: true}; return {...event, saved: false}});
+        const eventListProcess = eventsBookmarked.map((event) => {if(event.date > new Date()) return {...event, finished: false}; return {...event, finished: true}});
+        setUpcomingEvents(eventListProcess.filter((event) => !event.finished));
+        setPastEvents(eventListProcess.filter((event) => event.finished));
+        setLoading(false);
+      });
+    });
   }, []);
 
   const startUpcomingIndex = listUpcomingNum * 3;
-  const displayedUpcomingEvents = upcomingEvents.slice(startUpcomingIndex, startUpcomingIndex + 3);
   const totalUpcomingPages = Math.ceil(upcomingEvents.length / 3);
 
   const startPastIndex = listPastNum * 3;
   const displayedPastEvents = pastEvents.slice(startPastIndex, startPastIndex + 3);
   const totalPastPages = Math.ceil(pastEvents.length / 3);
+
+  const scrollToEvent = (index) => {
+    if (eventRefs.current[index] && containerRef.current) {
+      containerRef.current.scrollTo({
+        top: eventRefs.current[index].offsetTop - containerRef.current.offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToEvent(listUpcomingNum * 3);
+  }, [listUpcomingNum]);
 
   return (
     <>
@@ -164,11 +67,12 @@ const Events = () => {
               <p className='text-xl font-semibold text-center'>No upcoming events at the moment</p>
             </div>
           ) : (
-            <div className='flex gap-4 w-full pb-10'>
-              <div className='flex-col flex w-[99%] h-full gap-2 sm:border-t-2 border-[#a79d9d]'>
-                {displayedUpcomingEvents.map((event, index) => (
-                  <EventPoster key={index} eventData={event} eventsList={upcomingEvents} setEventsList={setUpcomingEvents} />
-                ))}
+            <div className='flex gap-4 w-full h-1/2 pb-10'>
+              <div ref={containerRef} className='flex-col flex w-[99%] max-h-[740px] overflow-y-hidden gap-2 sm:border-t-2 border-[#a79d9d]'>
+                {upcomingEvents.map((event, index) => (
+                  <div key={index} ref={(el) => { eventRefs.current[index] = el; }}>
+                    <EventPoster eventData={event} eventsList={upcomingEvents} setEventsList={setListUpcomingNum} />
+                  </div>))}
               </div>
               {totalUpcomingPages > 1 ? (<div className='select-none flex flex-col gap-4 justify-center'>
                 <div onClick={() => setListUpcomingNum(Math.max(listUpcomingNum - 1, 0))} disabled={listUpcomingNum === 0} className='px-4 py-2 disabled:opacity-50 hover:cursor-pointer'>
