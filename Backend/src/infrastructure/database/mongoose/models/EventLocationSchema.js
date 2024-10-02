@@ -10,7 +10,7 @@ const EventLocationSchema = new Schema({
     ref: "Event",
     required: true,
   },
-  roomId: {
+  locationId: {
     type: String, // UUID
     ref: "Location",
     required: true,
