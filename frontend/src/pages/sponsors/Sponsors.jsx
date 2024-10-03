@@ -6,67 +6,58 @@ import { FaHouseFloodWaterCircleArrowRight } from "react-icons/fa6";
 const Sponsors = () => {
   const [sponsorsData, setSponsorsData] = useState([
     {
-      name: "Tech Corp",
+      firstName: "Tech",
+      lastName: "Corp",
       logo: "https://stetson.com/cdn/shop/products/sbsnca-4134_silver_sand_1.jpg?v=1591215852",
-      info: "Leading tech solutions provider for over 20 years.",
+      email: "Tech@gmail.com",
     },
     {
-      name: "Innovate Inc.",
-      info: "Driving innovation in the education sector.",
+      firstName: "ahmed",
+      lastName: "mansour",
+      logo: "https://stetson.com/cdn/shop/products/sbsnca-4134_silver_sand_1.jpg?v=1591215852",
+      email: "mansour@gmail.com",
     },
     {
-      name: "Green Energy",
-      info: "Pioneering sustainable energy solutions worldwide.",
+      firstName: "ahmed",
+      lastName: "ayman",
+      logo: "https://stetson.com/cdn/shop/products/sbsnca-4134_silver_sand_1.jpg?v=1591215852",
+      email: "ahmedayman@gmail.com",
     },
     {
-      name: "Tech Corp",
-      info: "Leading tech solutions provider for over 20 years.",
+      firstName: "omar",
+      lastName: "elzeny",
+      logo: "https://stetson.com/cdn/shop/products/sbsnca-4134_silver_sand_1.jpg?v=1591215852",
+      email: "omarelzeny@gmail.com",
     },
     {
-      name: "Innovate Inc.",
-      info: "Driving innovation in the education sector.",
+      firstName: "medhat",
+      lastName: "tawfee",
+      logo: "https://stetson.com/cdn/shop/products/sbsnca-4134_silver_sand_1.jpg?v=1591215852",
+      email: "medhattawfee@gmail.com",
     },
     {
-      name: "Green Energy",
-      info: "Pioneering sustainable energy solutions worldwide.",
-    },
-    {
-      name: "Green Energy",
-      info: "Pioneering sustainable energy solutions worldwide.",
-    },
-    {
-      name: "Tech Corp",
-      info: "Leading tech solutions provider for over 20 years.",
-    },
-    {
-      name: "Innovate Inc.",
-      info: "Driving innovation in the education sector.",
-    },
-    {
-      name: "Green Energy",
-      info: "Pioneering sustainable energy solutions worldwide.",
+      firstName: "hatem",
+      lastName: "elghalab",
+      logo: "https://stetson.com/cdn/shop/products/sbsnca-4134_silver_sand_1.jpg?v=1591215852",
+      email: "elghalabhatem@gmail.com",
     },
   ]);
 
-  // useEffect(() => {
-  //   async function fetchSponsorData() {
-  //     console.log("Fetching sponsors");
-  //     try {
-  //       const res = await fetchSponsors();
-  //       if (!res.ok) {
-  //         throw new Error(`HTTP error! status: ${res.status}`);
-  //       }
+  useEffect(() => {
+    async function fetchSponsorData() {
+      try {
+        const res = await fetchSponsors();
 
-  //       const data = await res.json();
-  //       console.log("Sponsor API Response:", data);
-  //       setSponsorsData(data);
-  //     } catch (error) {
-  //       console.error("Error fetching sponsor data:", error);
-  //     }
-  //   }
+        const data = await res.json();
+        setSponsorsData(data);
+        console.log("Sponsor API Response:", data);
+      } catch (error) {
+        console.error("Error fetching sponsor data:", error);
+      }
+    }
 
-  //   fetchSponsorData();
-  // }, []);
+    fetchSponsorData();
+  }, []);
 
   return (
     <div className="relative">
@@ -86,13 +77,15 @@ const Sponsors = () => {
                     sponsor.logo ||
                     "https://scontent.fcai22-1.fna.fbcdn.net/v/t39.30808-6/457622186_1025691312682889_5724729561336696528_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=EL87MxY1-LIQ7kNvgFQ77CQ&_nc_ht=scontent.fcai22-1.fna&_nc_gid=AuumfDocibql9otSEhhSR0i&oh=00_AYD_1hlnvdhINNKeLuvRVKEnqSUKoWwkSUOZlz8xmrS75Q&oe=67011C92"
                   }
-                  alt={sponsor.name}
+                  alt={sponsor.firstName}
                   className="w-full h-full object-cover rounded-full"
                 />
               </div>
 
-              <p className="mt-4">{sponsor.name}</p>
-              <p className="text-sm mt-2">{sponsor.info}</p>
+              <p className="mt-4">
+                {sponsor.firstName} {sponsor.lastName}
+              </p>
+              <p className="text-sm mt-2">{sponsor.email}</p>
             </div>
           ))}
         </div>
