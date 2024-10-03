@@ -1,7 +1,12 @@
+import { getToken } from "../utils/helper";
+
 export const fetchEvents = async () => {
     try {
         const response = await fetch("http://localhost:5300/api/v1/events", {
             method: "GET",
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            }
         });
 
         if (!response.ok) {
@@ -20,6 +25,9 @@ export const fetchBookmarkedEvents = async () => {
     try {
         const response = await fetch("http://localhost:5300/api/v1/events/bookmarks", {
             method: "GET",
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            }
         });
 
         if (!response.ok) {
@@ -38,6 +46,9 @@ export const bookEvent = async (eventID) => {
     try {
         const response = await fetch(`http://localhost:5300/api/v1/events/${eventID}/bookmark`, {
             method: "POST",
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            }
         });
 
         if (!response.ok) {
@@ -55,6 +66,9 @@ export const unbookEvent = async (eventID) => {
     try {
         const response = await fetch(`http://localhost:5300/api/v1/events/${eventID}/remove-bookmark`, {
             method: "POST",
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            }
         });
 
         if (!response.ok) {

@@ -23,8 +23,9 @@ const Events = () => {
   useEffect(() => {
     fetchEvents().then((events) => {
       if(!events) return;
+      console.log(events);
       fetchBookmarkedEvents().then((bookmarkedEvents) => {
-        const eventsBookmarked = events.map((event) => {if(bookmarkedEvents.includes(event._id)) return {...event, saved: true}; return {...event, saved: false}});
+        const eventsBookmarked = events.map((event) => {if(bookmarkedEvents.events.includes(event._id)) return {...event, saved: true}; return {...event, saved: false}});
         const eventListProcess = eventsBookmarked.map((event) => {if(event.date > new Date()) return {...event, finished: false}; return {...event, finished: true}});
         setUpcomingEvents(eventListProcess.filter((event) => !event.finished));
         setPastEvents(eventListProcess.filter((event) => event.finished));
