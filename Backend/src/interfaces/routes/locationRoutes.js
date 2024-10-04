@@ -4,7 +4,7 @@ const locationController = require("../controllers/locationController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleValidation = require("../middlewares/roleValidation");
 
-router.get("/locations", authMiddleware, locationController.getAllLocations);
+router.get("/locations", locationController.getAllLocations);
 
 router.post(
   "/locations",

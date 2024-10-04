@@ -29,7 +29,6 @@ app.use("/api/v1", userRoutes);
 app.use("/api/v1", eventRoutes);
 app.use("/api/v1", locationRoutes);
 app.use("/api/v1", feedbackRoutes);
-//app.use("/api/v1", postRoutes);
 app.use("/api/v1", authRoutes);
 app.use("/api/v1", adminRoutes);
 
