@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import fakeEventImage from '@/assets/tccdbackground.jpeg';
 import "@/styles/eventPage.css";
+import { bookEvent, unbookEvent } from "@/endpoints/mainEventsEndpoints";
 
 import { FaRegStar } from "react-icons/fa";
 import { LuStarOff } from "react-icons/lu";
@@ -10,7 +11,7 @@ import { LuStarOff } from "react-icons/lu";
 export default function EventPoster({ eventData, eventsList, setEventsList }) {
     const [fadeIn, setFadeIn] = useState('opacity-0 -translate-x-1/2');
     const [registerEvent, setRegisterEvent] = useState(false);
-
+    
     const formattedDate = new Date(eventData.date).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -24,7 +25,6 @@ export default function EventPoster({ eventData, eventsList, setEventsList }) {
                 setFadeIn('opacity-100');
             }, 300);
         }, 10);
-
     }, []);
 
 
@@ -36,11 +36,37 @@ export default function EventPoster({ eventData, eventsList, setEventsList }) {
         }
     }, [registerEvent]);
 
+    const handleBookEvent = async () => {
+        const success = await bookEvent(eventData._id);
+        if (success) {
+            const updatedEventsList = eventsList.map(event => {
+                if (event._id === eventData._id) {
+                    return { ...event, saved: !event.saved };
+                }
+                return event;
+            });
+            setEventsList(updatedEventsList);
+        }
+    };
+
+    const handleUnBookEvent = async () => {
+        const success = await unbookEvent(eventData._id);
+        if (success) {
+            const updatedEventsList = eventsList.map(event => {
+                if (event._id === eventData._id) {
+                    return { ...event, saved: !event.saved };
+                }
+                return event;
+            });
+            setEventsList(updatedEventsList);
+        }
+    };
+
     return (
         <>
-            <div className="relative group flex-none sm:flex hidden w-full h-full z-10 gap-4 border-b-2 border-[#a79d9d] p-3">
-                {!eventData.saved ? <FaRegStar className="absolute z-30 top-4 right-4 text-2xl hover:opacity-100 opacity-50 hover:cursor-pointer transition-all duration-150 ease-in-out" />
-                    : <LuStarOff className="absolute z-30 top-4 right-4 text-2xl hover:opacity-100 opacity-50 hover:cursor-pointer transition-all duration-150 ease-in-out" />}
+            <div className="relative group flex-none sm:flex hidden w-full h-[240px] z-10 gap-4 border-b-2 border-[#a79d9d] p-3">
+                {!eventData.saved ? <FaRegStar onClick={() => handleBookEvent()} className="absolute z-30 top-4 right-4 text-2xl hover:opacity-100 opacity-50 hover:cursor-pointer transition-all duration-150 ease-in-out" />
+                    : <LuStarOff onClick={() => handleUnBookEvent()} className="absolute z-30 top-4 right-4 text-2xl hover:opacity-100 opacity-50 hover:cursor-pointer transition-all duration-150 ease-in-out" />}
                 <div className="relative w-[30%] min-w-[300px] aspect-w-16 aspect-h-9">
                     <img src={fakeEventImage} alt="event" className="absolute inset-0 w-full h-full object-fit rounded-lg" />
                 </div>
@@ -67,15 +93,12 @@ export default function EventPoster({ eventData, eventsList, setEventsList }) {
             <div className="relative group sm:hidden w-full min-h-[180px] z-10">
                 <img className="absolute top-0 h-full w-full object-fit z-0 rounded-lg" src={fakeEventImage} alt="event" />
                 <div className="absolute w-full bottom-0 bg-black bg-opacity-55 h-1/3 group-hover:h-full z-10 transition-all duration-300 ease-in-out rounded-b-lg group-hover:rounded-lg" />
-
-                {!eventData.saved ?
-                    <div className="absolute py-3 bottom-0 right-3 h-1/3 z-20 text-md text-white group-hover:h-full transition-all duration-300 ease-in-out">
-                        <FaRegStar className="hover:opacity-60 opacity-100 hover:cursor-pointer transition-all duration-150 ease-in-out" />
+                    <div className={`absolute py-3 bottom-0 right-3 h-1/3 text-md text-white group-hover:h-full transition-all duration-300 ease-in-out ${eventData.saved ? "-z-50 opacity-0" : "opacity-100 z-20"}`}>
+                        <FaRegStar onClick={() => handleBookEvent()} className={`hover:opacity-60 opacity-100 hover:cursor-pointer transition-all duration-150 ease-in-out`} />
                     </div>
-                    :
-                    <div className="absolute py-3 bottom-0 right-3 h-1/3 z-20 text-md text-white group-hover:h-full transition-all duration-300 ease-in-out">
-                        <LuStarOff className="hover:opacity-60 opacity-100 hover:cursor-pointer transition-all duration-150 ease-in-out" />
-                    </div>}
+                    <div className={`absolute py-3 bottom-0 right-3 h-1/3 text-md text-white group-hover:h-full transition-all duration-300 ease-in-out  ${!eventData.saved ? "-z-50 opacity-0" : "opacity-100 z-20"}`}>
+                        <LuStarOff onClick={() => handleUnBookEvent()} className="hover:opacity-60 opacity-100 hover:cursor-pointer transition-all duration-150 ease-in-out" />
+                    </div>
 
                 <div className="w-full h-fit p-3 z-20 absolute top-0 translate-y-[200%] group-hover:translate-y-0 text-white transition-all duration-300 ease-in-out">
                     <p className="text-sm">{eventData.title}</p>
